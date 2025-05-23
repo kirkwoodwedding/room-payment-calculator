@@ -31,7 +31,7 @@
     .content-container {
       max-width: 500px;
       margin: 40px auto;
-      background: rgba(255, 255, 255, 0.6); /* 60% opacity white */
+      background: rgba(162, 178, 159, 0.6);
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
@@ -73,6 +73,28 @@
       margin-top: 10px;
       font-size: 1.2rem;
     }
+
+    .booking-section {
+      background-color: rgba(255, 255, 255, 0.75);
+      margin-top: 40px;
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .booking-section h2 {
+      margin-top: 0;
+    }
+
+    .booking-section a {
+      color: #4a5d50;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .booking-section a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -113,6 +135,33 @@
     <div class="result" id="result"></div>
 
     <button id="addToCalendarBtn" style="display:none;">Add to Calendar</button>
+
+    <div class="booking-section">
+      <h2>How to Book Your Room</h2>
+      <p>
+        A <strong>$400 non-refundable deposit per room</strong> is required to reserve.  
+        This deposit is collected by our travel agent and goes toward your total room cost.  
+        <strong>Rooms are not held without a deposit</strong>, so we recommend booking early for the best availability.
+      </p>
+
+      <p><strong>Payment Timeline:</strong></p>
+      <ul>
+        <li><strong>Deposit:</strong> $400 — <em>Due as soon as you're ready to book</em></li>
+        <li><strong>Mid Payment (50% minus deposit):</strong> Due <strong>December 11, 2025</strong></li>
+        <li><strong>Final Balance:</strong> Due <strong>March 10, 2026</strong></li>
+      </ul>
+
+      <p><strong>Ready to Book?</strong><br>
+        Contact our travel agent <strong>Linda Pacey</strong>:<br>
+        📧 <a href="mailto:Linda@blissfulhoneymoons.com">Linda@blissfulhoneymoons.com</a><br>
+        📞 <a href="tel:6207981120">620-798-1120</a>
+      </p>
+
+      <p>
+        Or book directly here: <br>
+        👉 <a href="https://www.vacationcrm.com/IFrameRegistration?lookup_id=95f1f7de-6844-4e22-8db0-e0c4fa33c39d" target="_blank">Complete Your Room Reservation</a>
+      </p>
+    </div>
   </div>
 
   <script>
@@ -162,52 +211,49 @@
         deposit,
         firstPayment: halfPrice - deposit,
         firstDue: firstDueDate,
-        secondPayment: halfPrice,
-        secondDue: secondDueDate
+        finalPayment: halfPrice,
+        finalDue: secondDueDate
       };
     }
 
     function displayResult(plan) {
       resultDiv.innerHTML = `
-        <p>Total Price: <strong>${formatCurrency(plan.total)}</strong></p>
-        <p>Deposit Paid: <strong>${formatCurrency(plan.deposit)}</strong></p>
-        <p>First Payment (50% minus deposit): <strong>${formatCurrency(plan.firstPayment)}</strong> due by ${plan.firstDue}</p>
-        <p>Second Payment (Remaining 50%): <strong>${formatCurrency(plan.secondPayment)}</strong> due by ${plan.secondDue}</p>
+        Total Room Price: ${formatCurrency(plan.total)}<br>
+        Deposit Due Now: ${formatCurrency(plan.deposit)}<br>
+        2nd Payment Due ${plan.firstDue}: ${formatCurrency(plan.firstPayment)}<br>
+        Final Payment Due ${plan.finalDue}: ${formatCurrency(plan.finalPayment)}
       `;
       addToCalendarBtn.style.display = 'inline-block';
     }
 
     function generateICS() {
-      const plan = currentPlan;
-      if (!plan) return;
+      const title = 'Room Payment Due';
+      const description = 'Reminder: Your room payment is due.';
+      const location = 'Online';
+      const startDate = new Date(firstDueDate).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      const endDate = startDate;
 
-      const icsLines = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'PRODID:-//Wedding Payment Plan//EN',
-        'BEGIN:VEVENT',
-        `SUMMARY:First Payment Due - $${plan.firstPayment.toFixed(2)}`,
-        `DTSTART;VALUE=DATE:${plan.firstDue.replace(/-/g, '')}`,
-        'DESCRIPTION:Deposit paid $400. Remaining payment due.',
-        'END:VEVENT',
-        'BEGIN:VEVENT',
-        `SUMMARY:Second Payment Due - $${plan.secondPayment.toFixed(2)}`,
-        `DTSTART;VALUE=DATE:${plan.secondDue.replace(/-/g, '')}`,
-        'DESCRIPTION:Final payment due for your room.',
-        'END:VEVENT',
-        'END:VCALENDAR'
-      ];
+      const icsContent =
+        'BEGIN:VCALENDAR\n' +
+        'VERSION:2.0\n' +
+        'BEGIN:VEVENT\n' +
+        'SUMMARY:' + title + '\n' +
+        'DESCRIPTION:' + description + '\n' +
+        'LOCATION:' + location + '\n' +
+        'DTSTART:' + startDate + '\n' +
+        'DTEND:' + endDate + '\n' +
+        'END:VEVENT\n' +
+        'END:VCALENDAR';
 
-      const blob = new Blob([icsLines.join('\r\n')], {type: 'text/calendar'});
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'payment-reminders.ics';
-      a.click();
-      URL.revokeObjectURL(url);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'room-payment-reminder.ics';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
-
-    let currentPlan = null;
 
     calculateBtn.addEventListener('click', () => {
       const room = roomTypeSelect.value;
@@ -215,11 +261,11 @@
       const nights = nightsSelect.value;
 
       if (!room || !occ || !nights) {
-        alert('Please select all options.');
+        resultDiv.textContent = 'Please select all options.';
         return;
       }
 
-      currentPlan = generatePaymentPlan(room, occ, parseInt(nights));
+      const currentPlan = generatePaymentPlan(room, occ, parseInt(nights));
       displayResult(currentPlan);
     });
 
