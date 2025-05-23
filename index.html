@@ -134,7 +134,8 @@
 
     <div class="result" id="result"></div>
 
-    <button id="addToCalendarBtn" style="display:none;">Add to Calendar</button>
+    <button id="addToCalendarBtn" style="display:none;">Add Payment Reminders to Calendar</button>
+    <button id="addTravelDaysBtn" style="display:none;">Add Travel Days to Calendar</button>
 
     <div class="booking-section">
       <h2>Booking and Payment Information</h2>
@@ -198,6 +199,7 @@
     const calculateBtn = document.getElementById('calculateBtn');
     const resultDiv = document.getElementById('result');
     const addToCalendarBtn = document.getElementById('addToCalendarBtn');
+    const addTravelDaysBtn = document.getElementById('addTravelDaysBtn');
 
     function formatCurrency(num) {
       return '$' + num.toFixed(2);
@@ -224,11 +226,20 @@
         Final Payment Due ${plan.finalDue}: ${formatCurrency(plan.finalPayment)}
       `;
       addToCalendarBtn.style.display = 'inline-block';
+      addTravelDaysBtn.style.display = 'inline-block';
     }
 
     // Helper to format date for ICS (YYYYMMDD)
     function formatDateICS(dateStr) {
       const date = new Date(dateStr);
+      const year = date.getUTCFullYear();
+      const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+      const day = date.getUTCDate().toString().padStart(2, '0');
+      return `${year}${month}${day}`;
+    }
+
+    // Helper to format Date object (no time) for ICS
+    function formatDateObjICS(date) {
       const year = date.getUTCFullYear();
       const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
       const day = date.getUTCDate().toString().padStart(2, '0');
@@ -244,6 +255,26 @@
         'BEGIN:VCALENDAR\n' +
         'VERSION:2.0\n' +
         'PRODID:-//D&R Wedding//Room Payment Reminder//EN\n' +
+        'BEGIN:VEVENT\n' +
+        `UID:${Math.random().toString(36).substring(2)}@drwedding.com\n` +
+        `DTSTAMP:${dtstamp}\n` +
+        `SUMMARY:${title}\n` +
+        `DESCRIPTION:${description}\n` +
+        `DTSTART;VALUE=DATE:${dtstart}\n` +
+        `DTEND;VALUE=DATE:${dtend}\n` +
+        'END:VEVENT\n' +
+        'END:VCALENDAR'
+      );
+    }
+
+    function generateTravelICS(title, description, startDate, endDate) {
+      const dtstamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      const dtstart = formatDateObjICS(startDate);
+      const dtend = formatDateObjICS(endDate);
+      return (
+        'BEGIN:VCALENDAR\n' +
+        'VERSION:2.0\n' +
+        'PRODID:-//D&R Wedding//Travel Stay Reminder//EN\n' +
         'BEGIN:VEVENT\n' +
         `UID:${Math.random().toString(36).substring(2)}@drwedding.com\n` +
         `DTSTAMP:${dtstamp}\n` +
@@ -282,6 +313,17 @@
       downloadICS('D&R-Wedding-Final-Room-Payment-Due.ics', ics2);
     }
 
+    function addTravelDays(plan, nights) {
+      const startDate = new Date(Date.UTC(2026, 6, 14)); // July is month 6 (zero-based)
+      const endDate = new Date(Date.UTC(2026, 6, 14 + nights)); // Add nights to start date
+
+      const title = 'D&R Wedding Travel Stay';
+      const description = `Your travel stay for ${nights} night(s) from July 14, 2026 through July ${14 + nights}, 2026. Enjoy your stay!`;
+
+      const ics = generateTravelICS(title, description, startDate, endDate);
+      downloadICS('D&R-Wedding-Travel-Stay.ics', ics);
+    }
+
     calculateBtn.addEventListener('click', () => {
       const room = roomTypeSelect.value;
       const occ = occupancySelect.value;
@@ -290,19 +332,27 @@
       if (!room || !occ || !nights) {
         resultDiv.textContent = 'Please select all options.';
         addToCalendarBtn.style.display = 'none';
+        addTravelDaysBtn.style.display = 'none';
         return;
       }
 
       const currentPlan = generatePaymentPlan(room, occ, parseInt(nights));
       displayResult(currentPlan);
 
-      // Save currentPlan for calendar button usage
+      // Save currentPlan and nights for button usage
       addToCalendarBtn.currentPlan = currentPlan;
+      addTravelDaysBtn.nights = parseInt(nights);
     });
 
     addToCalendarBtn.addEventListener('click', () => {
       if (addToCalendarBtn.currentPlan) {
         addBothReminders(addToCalendarBtn.currentPlan);
+      }
+    });
+
+    addTravelDaysBtn.addEventListener('click', () => {
+      if (addTravelDaysBtn.nights) {
+        addTravelDays(null, addTravelDaysBtn.nights);
       }
     });
   </script>
