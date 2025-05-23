@@ -11,15 +11,16 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #dce2d9; /* sage green */
-      max-width: 450px;
+      background-color: #F7E7CE; /* champagne */
+      color: #D2B48C; /* warm taupe */
+      max-width: 480px;
       margin: 20px auto;
       padding: 20px;
-      color: #333;
     }
 
     h2 {
       text-align: center;
+      color: #F4CCCC; /* blush pink */
     }
 
     label {
@@ -34,27 +35,30 @@
       margin-top: 5px;
       font-size: 1em;
       border-radius: 5px;
-      border: 1px solid #ccc;
+      border: 1px solid #B2C8B2; /* sage green border */
+      background-color: #F5F1E8; /* ivory background */
+      color: #D2B48C; /* warm taupe text */
     }
 
     .result {
       margin-top: 20px;
       padding: 15px;
-      background: #ffffff;
+      background: #F5F1E8; /* ivory */
       border-radius: 8px;
-      box-shadow: 0 0 5px #aaa;
+      box-shadow: 0 0 5px #B2C8B2;
     }
 
     button {
-      background: #5c7f67;
-      color: white;
+      background: #F4CCCC; /* blush */
+      color: #D2B48C; /* warm taupe */
+      font-weight: 600;
       border: none;
       margin-top: 10px;
-      font-weight: 600;
     }
 
     button:hover {
-      background: #4b6954;
+      background: #D2B48C; /* warm taupe */
+      color: #F4CCCC; /* blush */
     }
   </style>
 </head>
@@ -195,8 +199,4 @@ END:VCALENDAR`;
     roomType.addEventListener('change', calculate);
     occupancy.addEventListener('change', calculate);
     nights.addEventListener('change', calculate);
-    downloadCalendarBtn.addEventListener('click', generateICS);
-  </script>
-
-</body>
-</html>
+    downloadCalendarBtn.addEventListener
