@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wedding Payment Calculator</title>
+  <title>Room Payment Calculator</title>
 
   <!-- Google Fonts: Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -61,7 +61,7 @@
 
 <body>
 
-  <h2>Wedding Payment Calculator</h2>
+  <h2>Room Payment Calculator</h2>
 
   <label for="roomType">Room Type</label>
   <select id="roomType">
@@ -69,7 +69,7 @@
     <option value="Junior Suite">Junior Suite</option>
     <option value="Junior Suite Ocean View">Junior Suite Ocean View</option>
     <option value="INSPIRA Swim Out">INSPIRA Swim Out</option>
-    <option value="Inspira Terrace">Inspira Terrace</option>
+    <option value="INSPIRA Terrace">INSPIRA Terrace</option>
   </select>
 
   <label for="occupancy">Occupancy</label>
@@ -114,7 +114,7 @@
         "Double": { "3": 3181.40, "4": 4213.88, "5": 5246.34 },
         "Triple": { "3": 4770.15, "4": 6318.21, "5": 7866.27 }
       },
-      "Inspira Terrace": {
+      "INSPIRA Terrace": {
         "Single": { "3": 3139.40, "4": 4171.87, "5": 5204.34 },
         "Double": { "3": 3181.40, "4": 4213.88, "5": 5246.34 },
         "Triple": { "3": 4770.15, "4": 6318.21, "5": 7866.27 }
@@ -168,13 +168,13 @@
 VERSION:2.0
 CALSCALE:GREGORIAN
 BEGIN:VEVENT
-SUMMARY:Wedding Payment – First Half Due
+SUMMARY:Room Payment – First Half Due
 DESCRIPTION:Your first 50% payment (minus $400 deposit) is due.
 DTSTART;VALUE=DATE:${dt1}
 DTEND;VALUE=DATE:${dt1}
 END:VEVENT
 BEGIN:VEVENT
-SUMMARY:Wedding Payment – Final Balance Due
+SUMMARY:Room Payment – Final Balance Due
 DESCRIPTION:Your final 50% payment is due.
 DTSTART;VALUE=DATE:${dt2}
 DTEND;VALUE=DATE:${dt2}
@@ -185,7 +185,7 @@ END:VCALENDAR`;
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'Wedding_Payment_Reminders.ics';
+      a.download = 'Room_Payment_Reminders.ics';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -200,4 +200,3 @@ END:VCALENDAR`;
 
 </body>
 </html>
-
