@@ -1,82 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Room Payment Calculator</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-<style>
-  body, html {
-    margin: 0; padding: 0; height: 100%;
-    font-family: 'Poppins', sans-serif;
-  }
-  .background-container {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%; z-index: -1;
-    overflow: hidden;
-  }
-  .bg-map {
-    width: 100%; height: 100%; object-fit: cover; opacity: 1;
-  }
-  .content-container {
-    max-width: 500px;
-    margin: 40px auto;
-    background: rgba(162, 178, 159, 0.6);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    min-height: 100vh;
-    position: relative;
-    z-index: 1;
-    line-height: 1.5;
-    color: #333;
-  }
-  label, select, button {
-    font-family: 'Poppins', sans-serif;
-  }
-  select, button {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  button {
-    background-color: #5d7263;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  button:hover {
-    background-color: #4a5d50;
-  }
-  .result {
-    font-weight: bold;
-    margin-top: 10px;
-    font-size: 1.2rem;
-  }
-  .booking-section {
-    background-color: rgba(255,255,255,0.75);
-    margin-top: 40px;
-    padding: 20px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-  }
-  .booking-section h2 {
-    margin-top: 0;
-  }
-  .booking-section a {
-    color: #4a5d50;
-    font-weight: bold;
-    text-decoration: none;
-  }
-  .booking-section a:hover {
-    text-decoration: underline;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Room Payment Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .background-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-map {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 1;
+    }
+
+    .content-container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: rgba(162, 178, 159, 0.6);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      line-height: 1.5;
+      color: #333;
+    }
+
+    label, select, button {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    select, button {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #5d7263;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #4a5d50;
+    }
+
+    .result {
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 1.2rem;
+    }
+
+    .booking-section {
+      background-color: rgba(255, 255, 255, 0.75);
+      margin-top: 40px;
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .booking-section a {
+      color: #4a5d50;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .booking-section a:hover {
+      text-decoration: underline;
+    }
+
+    .calendar-section {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.8);
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .calendar-section label, .calendar-section select, .calendar-section button {
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
   <div class="background-container">
@@ -115,242 +141,265 @@
 
     <div class="result" id="result"></div>
 
-    <div id="calendarTools" style="margin-top: 20px;">
-      <label for="calendarEventSelect">Add a Calendar Reminder:</label>
-      <select id="calendarEventSelect" style="margin-bottom: 10px;">
-        <option value="" disabled selected>Select an event</option>
-        <option value="secondPayment">2nd Payment - Due Dec 11, 2025</option>
-        <option value="finalPayment">Final Payment - Due Mar 10, 2026</option>
-        <option value="travelDates">Travel Dates - Starting July 14, 2026</option>
+    <!-- Calendar Reminder Section -->
+    <div class="calendar-section" style="display:none;" id="calendarSection">
+      <label for="reminderType">Select Reminder to Add:</label>
+      <select id="reminderType">
+        <option value="secondPayment">D&R Wedding 2nd Room Payment Due</option>
+        <option value="finalPayment">D&R Wedding Final Room Payment Due</option>
+        <option value="travelDates">Travel Dates</option>
       </select>
-      <button id="downloadICSBtn">Add to Apple Calendar (.ics)</button>
-      <button id="googleCalBtn">Add to Google Calendar</button>
+
+      <button id="addIcsBtn">Add to Apple/Other Calendar (.ics)</button>
+      <button id="addGoogleBtn">Add to Google Calendar</button>
     </div>
 
     <div class="booking-section">
-  <p>
-    A $400 deposit secures your spot and counts toward your total stay. We’ve got a block of rooms held just for our guests, but availability is limited! Reserve your spot early, avoid the last-minute scramble, and get ready for some serious R&R (plus a little wedding magic with ✨ D&R ✨)
-  </p>
+      <p>
+        A $400 deposit secures your spot and counts toward your total stay. We’ve got a block of rooms held just for our guests, but availability is limited! Reserve your spot early, avoid the last-minute scramble, and get ready for some serious R&R (plus a little wedding magic with ✨ D&R ✨)
+      </p>
 
-  <p><strong>Payment Timeline:</strong></p>
-  <ul>
-    <li><strong>Deposit:</strong> $400 — Due <strong>as soon as you're ready to book</strong></li>
-    <li><strong>2nd Payment (50% minus deposit):</strong> Due <strong>December 11, 2025</strong></li>
-    <li><strong>Final Payment (remaining 50%):</strong> Due <strong>March 10, 2026</strong></li>
-  </ul>
+      <p><strong>Payment Timeline:</strong></p>
+      <ul>
+        <li><strong>Deposit:</strong> $400 — Due <strong>as soon as you're ready to book</strong></li>
+        <li><strong>2nd Payment (50% minus deposit):</strong> Due <strong>December 11, 2025</strong></li>
+        <li><strong>Final Payment (remaining 50%):</strong> Due <strong>March 10, 2026</strong></li>
+      </ul>
 
-  <p><strong>Ready to Book?</strong><br />
-    Contact our travel agent <strong>Linda Pacey</strong>:<br />
-    📧 <a href="mailto:Linda@blissfulhoneymoons.com">Linda@blissfulhoneymoons.com</a><br />
-    📞 <a href="tel:6207981120">620-798-1120</a>
-  </p>
+      <p><strong>Ready to Book?</strong><br />
+        Contact our travel agent <strong>Linda Pacey</strong>:<br />
+        📧 <a href="mailto:Linda@blissfulhoneymoons.com">Linda@blissfulhoneymoons.com</a><br />
+        📞 <a href="tel:6207981120">620-798-1120</a>
+      </p>
 
-  <p>
-    Or book directly here:<br />
-    🔗 <a href="https://www.vacationcrm.com/IFrameRegistration?lookup_id=95f1f7de-6844-4e22-8db0-e0c4fa33c39d" target="_blank" rel="noopener noreferrer">Make a payment</a>
-  </p>
-</div>
+      <p>
+        Or book directly here:<br />
+        🔗 <a href="https://www.vacationcrm.com/IFrameRegistration?lookup_id=95f1f7de-6844-4e22-8db0-e0c4fa33c39d" target="_blank" rel="noopener noreferrer">Make a payment</a>
+      </p>
+    </div>
+  </div>
 
-
-<script>
-  const prices = {
-    juniorSuite: {
-      single: {3: 1654.99, 4: 2192.65, 5: 2730.31},
-      double: {3: 1981.40, 4: 2613.88, 5: 3246.34},
-      triple: {3: 2974.05, 4: 3923.40, 5: 4872.75}
-    },
-    juniorSuiteOceanView: {
-      single: {3: 1717.32, 4: 2275.77, 5: 2834.21},
-      double: {3: 2051.54, 4: 2707.38, 5: 3363.22},
-      triple: {3: 3079.26, 4: 4063.65, 5: 5048.07}
-    },
-    inspiraSwimOut: {
-      single: {3: 3139.40, 4: 4171.87, 5: 5204.34},
-      double: {3: 3181.40, 4: 4213.88, 5: 5246.34},
-      triple: {3: 4770.15, 4: 6318.21, 5: 7866.27}
-    },
-    inspiraTerrace: {
-      single: {3: 3139.40, 4: 4171.87, 5: 5204.34},
-      double: {3: 3181.40, 4: 4213.88, 5: 5246.34},
-      triple: {3: 4770.15, 4: 6318.21, 5: 7866.27}
-    }
-  };
-
-  const deposit = 400;
-  const firstDueDateStr = 'December 11, 2025';
-  const secondDueDateStr = 'March 10, 2026';
-
-  const roomTypeSelect = document.getElementById('roomType');
-  const occupancySelect = document.getElementById('occupancy');
-  const nightsSelect = document.getElementById('nights');
-  const calculateBtn = document.getElementById('calculateBtn');
-  const resultDiv = document.getElementById('result');
-  const calendarEventSelect = document.getElementById('calendarEventSelect');
-  const downloadICSBtn = document.getElementById('downloadICSBtn');
-  const googleCalBtn = document.getElementById('googleCalBtn');
-
-  function formatCurrency(num) {
-    return '$' + num.toFixed(2);
-  }
-
-  function generatePaymentPlan(room, occ, nights) {
-    const totalPrice = prices[room][occ][nights];
-    const halfPrice = totalPrice / 2;
-    return {
-      total: totalPrice,
-      deposit,
-      firstPayment: halfPrice - deposit,
-      firstDue: new Date(firstDueDateStr),
-      finalPayment: halfPrice,
-      finalDue: new Date(secondDueDateStr)
-    };
-  }
-
-  function displayResult(plan) {
-    resultDiv.innerHTML = `
-      Total Room Price: ${formatCurrency(plan.total)}<br>
-      Deposit Due Now: ${formatCurrency(plan.deposit)}<br>
-      2nd Payment Due ${plan.firstDue.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}: ${formatCurrency(plan.firstPayment)}<br>
-      Final Payment Due ${plan.finalDue.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}: ${formatCurrency(plan.finalPayment)}
-    `;
-  }
-
-  calculateBtn.addEventListener('click', () => {
-    const room = roomTypeSelect.value;
-    const occ = occupancySelect.value;
-    const nights = parseInt(nightsSelect.value);
-
-    if (!room || !occ || !nights) {
-      resultDiv.textContent = 'Please select all options.';
-      return;
-    }
-
-    const plan = generatePaymentPlan(room, occ, nights);
-    displayResult(plan);
-  });
-
-  // Create calendar event helpers
-
-  function formatDateICS(date) {
-    // Format date as YYYYMMDD
-    return date.toISOString().slice(0,10).replace(/-/g,"");
-  }
-
-  function formatDateTimeICS(date) {
-    // Format date with time for ICS YYYYMMDDTHHmmssZ (UTC)
-    return date.toISOString().replace(/[-:]/g,"").split('.')[0] + "Z";
-  }
-
-  function createICS(event) {
-    const {title, description, startDate, endDate} = event;
-
-    const dtStart = formatDateICS(startDate);
-    // ICS all-day event endDate is day after actual end
-    const dtEnd = formatDateICS(new Date(endDate.getTime() + 24*60*60*1000));
-
-    return `BEGIN:VCALENDAR
-VERSION:2.0
-CALSCALE:GREGORIAN
-BEGIN:VEVENT
-SUMMARY:${title}
-DESCRIPTION:${description}
-DTSTART;VALUE=DATE:${dtStart}
-DTEND;VALUE=DATE:${dtEnd}
-END:VEVENT
-END:VCALENDAR`;
-  }
-
-  function downloadICS(event) {
-    const icsContent = createICS(event);
-    const blob = new Blob([icsContent], {type: 'text/calendar'});
-    const url = URL.createObjectURL(blob);
-
-    const link
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${event.title.replace(/\s+/g, '_')}.ics`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  }
-
-  function openGoogleCalendar(event) {
-    const {title, description, startDate, endDate} = event;
-    const formatDateTimeGoogle = (date) => {
-      return date.toISOString().replace(/-|:|\.\d\d\d/g, '');
+  <script>
+    const prices = {
+      juniorSuite: {
+        single: {3: 1654.99, 4: 2192.65, 5: 2730.31},
+        double: {3: 1981.40, 4: 2613.88, 5: 3246.34},
+        triple: {3: 2974.05, 4: 3923.40, 5: 4872.75}
+      },
+      juniorSuiteOceanView: {
+        single: {3: 1717.32, 4: 2275.77, 5: 2834.21},
+        double: {3: 2051.54, 4: 2707.38, 5: 3363.22},
+        triple: {3: 3079.26, 4: 4063.65, 5: 5048.07}
+      },
+      inspiraSwimOut: {
+        single: {3: 3139.40, 4: 4171.87, 5: 5204.34},
+        double: {3: 3181.40, 4: 4213.88, 5: 5246.34},
+        triple: {3: 4770.15, 4: 6318.21, 5: 7866.27}
+      },
+      inspiraTerrace: {
+        single: {3: 3139.40, 4: 4171.87, 5: 5204.34},
+        double: {3: 3181.40, 4: 4213.88, 5: 5246.34},
+        triple: {3: 4770.15, 4: 6318.21, 5: 7866.27}
+      }
     };
 
-    const start = formatDateTimeGoogle(startDate);
-    const end = formatDateTimeGoogle(endDate);
+    const deposit = 400;
+    const firstDueDate = 'December 11, 2025';
+    const secondDueDate = 'March 10, 2026';
 
-    const url = `https://calendar.google.com/calendar/r/eventedit?text=${encodeURIComponent(title)}&details=${encodeURIComponent(description)}&dates=${start}/${end}`;
-    window.open(url, '_blank');
-  }
+    const roomTypeSelect = document.getElementById('roomType');
+    const occupancySelect = document.getElementById('occupancy');
+    const nightsSelect = document.getElementById('nights');
+    const calculateBtn = document.getElementById('calculateBtn');
+    const resultDiv = document.getElementById('result');
 
-  downloadICSBtn.addEventListener('click', () => {
-    const selectedEvent = calendarEventSelect.value;
-    if (!selectedEvent) {
-      alert('Please select an event first.');
-      return;
-    }
-    let event;
-    if (selectedEvent === 'secondPayment') {
-      event = {
-        title: '2nd Payment Due',
-        description: 'Your second payment for the room is due.',
-        startDate: new Date('2025-12-11'),
-        endDate: new Date('2025-12-11')
-      };
-    } else if (selectedEvent === 'finalPayment') {
-      event = {
-        title: 'Final Payment Due',
-        description: 'Your final payment for the room is due.',
-        startDate: new Date('2026-03-10'),
-        endDate: new Date('2026-03-10')
-      };
-    } else if (selectedEvent === 'travelDates') {
-      event = {
-        title: 'Travel Dates Start',
-        description: 'Your travel to the destination starts today!',
-        startDate: new Date('2026-07-14'),
-        endDate: new Date('2026-07-14')
-      };
-    }
-    downloadICS(event);
-  });
+    const calendarSection = document.getElementById('calendarSection');
+    const reminderType = document.getElementById('reminderType');
+    const addIcsBtn = document.getElementById('addIcsBtn');
+    const addGoogleBtn = document.getElementById('addGoogleBtn');
 
-  googleCalBtn.addEventListener('click', () => {
-    const selectedEvent = calendarEventSelect.value;
-    if (!selectedEvent) {
-      alert('Please select an event first.');
-      return;
+    function formatCurrency(num) {
+      return '$' + num.toFixed(2);
     }
-    let event;
-    if (selectedEvent === 'secondPayment') {
-      event = {
-        title: '2nd Payment Due',
-        description: 'Your second payment for the room is due.',
-        startDate: new Date('2025-12-11T09:00:00Z'),
-        endDate: new Date('2025-12-11T10:00:00Z')
+
+    let currentPlan = null; // Store current payment plan and nights for calendar functions
+
+    calculateBtn.addEventListener('click', () => {
+      const room = roomTypeSelect.value;
+      const occ = occupancySelect.value;
+      const nights = parseInt(nightsSelect.value, 10);
+
+      if (!room || !occ || !nights) {
+        resultDiv.textContent = 'Please select all options.';
+        calendarSection.style.display = 'none';
+        currentPlan = null;
+        return;
+      }
+
+      const totalPrice = prices[room]?.[occ]?.[nights];
+
+      if (!totalPrice) {
+        resultDiv.textContent = 'Price not found for selected options.';
+        calendarSection.style.display = 'none';
+        currentPlan = null;
+        return;
+      }
+
+      const halfPrice = totalPrice / 2;
+
+      currentPlan = {
+        total: totalPrice,
+        deposit,
+        firstPayment: halfPrice - deposit,
+        firstDue: firstDueDate,
+        finalPayment: halfPrice,
+        finalDue: secondDueDate,
+        nights,
       };
-    } else if (selectedEvent === 'finalPayment') {
-      event = {
-        title: 'Final Payment Due',
-        description: 'Your final payment for the room is due.',
-        startDate: new Date('2026-03-10T09:00:00Z'),
-        endDate: new Date('2026-03-10T10:00:00Z')
-      };
-    } else if (selectedEvent === 'travelDates') {
-      event = {
-        title: 'Travel Dates Start',
-        description: 'Your travel to the destination starts today!',
-        startDate: new Date('2026-07-14T09:00:00Z'),
-        endDate: new Date('2026-07-14T10:00:00Z')
-      };
+
+      resultDiv.innerHTML = `
+        Total Room Price: ${formatCurrency(currentPlan.total)}<br>
+        Deposit Due Now: ${formatCurrency(currentPlan.deposit)}<br>
+        2nd Payment Due ${currentPlan.firstDue}: ${formatCurrency(currentPlan.firstPayment)}<br>
+        Final Payment Due ${currentPlan.finalDue}: ${formatCurrency(currentPlan.finalPayment)}
+      `;
+
+      calendarSection.style.display = 'block';
+    });
+
+    // Helper: Format date to ICS YYYYMMDD
+    function formatDateICS(date) {
+      const y = date.getUTCFullYear();
+      const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const d = String(date.getUTCDate()).padStart(2, '0');
+      return `${y}${m}${d}`; 
     }
-    openGoogleCalendar(event);
-  });
-</script>
-</body>
-</html>
+    
+    // Generate ICS file content for an event
+    function generateICS({ title, description, startDate, endDate }) {
+      const dtStart = formatDateICS(startDate) + 'T000000Z';
+      // End date in ICS is exclusive, so add one day
+      const dtEnd = formatDateICS(new Date(endDate.getTime() + 24 * 60 * 60 * 1000)) + 'T000000Z';
+    
+      return `BEGIN:VCALENDAR
+    VERSION:2.0
+    PRODID:-//D&R Wedding//Room Payment Reminder//EN
+    BEGIN:VEVENT
+    UID:${Date.now()}@drwedding.com
+    DTSTAMP:${formatDateICS(new Date())}T000000Z
+    DTSTART:${dtStart}
+    DTEND:${dtEnd}
+    SUMMARY:${title}
+    DESCRIPTION:${description}
+    END:VEVENT
+    END:VCALENDAR`;
+    }
+    
+    // Download ICS file
+    function downloadICS(content, filename) {
+      const blob = new Blob([content], { type: 'text/calendar' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    // Open Google Calendar link
+    function openGoogleCalendar({ title, description, startDate, endDate }) {
+      // Format dates as YYYYMMDD for Google Calendar
+      const formatDateGC = (date) => {
+        const y = date.getUTCFullYear();
+        const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const d = String(date.getUTCDate()).padStart(2, '0');
+        return `${y}${m}${d}`;
+      };
+    
+      const startStr = formatDateGC(startDate);
+      // For Google Calendar, end date is exclusive, so add one day
+      const endStr = formatDateGC(new Date(endDate.getTime() + 24 * 60 * 60 * 1000));
+    
+      const url = new URL('https://calendar.google.com/calendar/render');
+      url.searchParams.set('action', 'TEMPLATE');
+      url.searchParams.set('text', title);
+      url.searchParams.set('details', description);
+      url.searchParams.set('dates', `${startStr}/${endStr}`);
+    
+      window.open(url.toString(), '_blank', 'noopener,noreferrer');
+    }
+    
+    addIcsBtn.addEventListener('click', () => {
+      if (!currentPlan) return alert('Please calculate payment first.');
+    
+      const type = reminderType.value;
+      let eventData;
+    
+      if (type === 'secondPayment') {
+        const title = "D&R Wedding 2nd Room Payment Due";
+        const desc = `Payment Due: ${formatCurrency(currentPlan.firstPayment)} on ${currentPlan.firstDue}`;
+        const startDate = new Date(currentPlan.firstDue);
+        const endDate = new Date(startDate);
+        eventData = { title, description: desc, startDate, endDate };
+      } else if (type === 'finalPayment') {
+        const title = "D&R Wedding Final Room Payment Due";
+        const desc = `Payment Due: ${formatCurrency(currentPlan.finalPayment)} on ${currentPlan.finalDue}`;
+        const startDate = new Date(currentPlan.finalDue);
+        const endDate = new Date(startDate);
+        eventData = { title, description: desc, startDate, endDate };
+      } else if (type === 'travelDates') {
+        if (!currentPlan.nights) return alert('Please select number of nights.');
+    
+        const title = "D&R Wedding Travel Dates";
+        const startDate = new Date('2026-07-14T00:00:00Z');
+        // Travel ends on start + nights (exclusive end)
+        const endDate = new Date(startDate.getTime() + currentPlan.nights * 24 * 60 * 60 * 1000);
+        const desc = `Travel stay for ${currentPlan.nights} night(s) at D&R Wedding block.`;
+        eventData = { title, description: desc, startDate, endDate };
+      } else {
+        return alert('Unknown reminder type.');
+      }
+    
+      const icsContent = generateICS(eventData);
+      let filename = 'DR_Wedding_Reminder.ics';
+      if(type === 'secondPayment') filename = 'DR_Wedding_2nd_Payment_Due.ics';
+      if(type === 'finalPayment') filename = 'DR_Wedding_Final_Payment_Due.ics';
+      if(type === 'travelDates') filename = 'DR_Wedding_Travel_Dates.ics';
+    
+      downloadICS(icsContent, filename);
+    });
+    
+    addGoogleBtn.addEventListener('click', () => {
+      if (!currentPlan) return alert('Please calculate payment first.');
+    
+      const type = reminderType.value;
+      let eventData;
+    
+      if (type === 'secondPayment') {
+        const title = "D&R Wedding 2nd Room Payment Due";
+        const desc = `Payment Due: ${formatCurrency(currentPlan.firstPayment)} on ${currentPlan.firstDue}`;
+        const startDate = new Date(currentPlan.firstDue);
+        const endDate = new Date(startDate);
+        eventData = { title, description: desc, startDate, endDate };
+      } else if (type === 'finalPayment') {
+        const title = "D&R Wedding Final Room Payment Due";
+        const desc = `Payment Due: ${formatCurrency(currentPlan.finalPayment)} on ${currentPlan.finalDue}`;
+        const startDate = new Date(currentPlan.finalDue);
+        const endDate = new Date(startDate);
+        eventData = { title, description: desc, startDate, endDate };
+      } else if (type === 'travelDates') {
+        if (!currentPlan.nights) return alert('Please select number of nights.');
+    
+        const title = "D&R Wedding Travel Dates";
+        const startDate = new Date('2026-07-14T00:00:00Z');
+        const endDate = new Date(startDate.getTime() + currentPlan.nights * 24 * 60 * 60 * 1000);
+        const desc = `Travel stay for ${currentPlan.nights} night(s) at D&R Wedding block.`;
+        eventData = { title, description: desc, startDate, endDate };
+      } else {
+        return alert('Unknown reminder type.');
+      }
+    
+      openGoogleCalendar(eventData);
+    });
