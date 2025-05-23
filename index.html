@@ -134,16 +134,7 @@
 
     <div class="result" id="result"></div>
 
-    <div id="calendarOptions" style="display:none; margin-top: 15px;">
-      <label for="calendarDate">Add Reminder For:</label>
-      <select id="calendarDate">
-        <option value="second">2nd Payment – December 11, 2025</option>
-        <option value="final">Final Payment – March 10, 2026</option>
-      </select>
-
-      <button id="downloadICSBtn">Add to Apple Calendar</button>
-      <button id="googleCalBtn">Add to Google Calendar</button>
-    </div>
+    <button id="addToCalendarBtn" style="display:none;">Add to Calendar</button>
 
     <div class="booking-section">
       <h2>Booking and Payment Information</h2>
@@ -198,58 +189,32 @@
     };
 
     const deposit = 400;
+    const firstDueDate = 'December 11, 2025';
+    const secondDueDate = 'March 10, 2026';
+
     const roomTypeSelect = document.getElementById('roomType');
     const occupancySelect = document.getElementById('occupancy');
     const nightsSelect = document.getElementById('nights');
     const calculateBtn = document.getElementById('calculateBtn');
     const resultDiv = document.getElementById('result');
-    const calendarOptions = document.getElementById('calendarOptions');
-    const calendarDateSelect = document.getElementById('calendarDate');
-    const downloadICSBtn = document.getElementById('downloadICSBtn');
-    const googleCalBtn = document.getElementById('googleCalBtn');
+    const addToCalendarBtn = document.getElementById('addToCalendarBtn');
 
-    function formatCurrency(amount) {
-      return amount.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    function formatCurrency(num) {
+      return '$' + num.toFixed(2);
     }
 
-    function calculatePayments(roomType, occupancy, nights) {
-      const total = prices[roomType]?.[occupancy]?.[nights];
-      if (!total) return null;
-
-      // 2nd payment: 50% of total minus deposit
-      const secondPayment = (total / 2) - deposit;
-      // Final payment: remaining 50%
-      const finalPayment = total / 2;
-
+    function generatePaymentPlan(room, occ, nights) {
+      const totalPrice = prices[room][occ][nights];
+      const halfPrice = totalPrice / 2;
       return {
-        total,
+        total: totalPrice,
         deposit,
-        firstPayment: secondPayment,
-        finalPayment,
-        firstDue: "December 11, 2025",
-        finalDue: "March 10, 2026"
+        firstPayment: halfPrice - deposit,
+        firstDue: firstDueDate,
+        finalPayment: halfPrice,
+        finalDue: secondDueDate
       };
     }
-
-    calculateBtn.addEventListener('click', () => {
-      const roomType = roomTypeSelect.value;
-      const occupancy = occupancySelect.value;
-      const nights = parseInt(nightsSelect.value, 10);
-
-      if (!roomType || !occupancy || !nights) {
-        alert('Please select all options before calculating.');
-        return;
-      }
-
-      const plan = calculatePayments(roomType, occupancy, nights);
-      if (!plan) {
-        resultDiv.textContent = 'Unable to calculate payment for the selected options.';
-        calendarOptions.style.display = 'none';
-        return;
-      }
-
-      displayResult(plan);
-    });
 
     function displayResult(plan) {
       resultDiv.innerHTML = `
@@ -258,79 +223,87 @@
         2nd Payment Due ${plan.firstDue}: ${formatCurrency(plan.firstPayment)}<br>
         Final Payment Due ${plan.finalDue}: ${formatCurrency(plan.finalPayment)}
       `;
-      calendarOptions.style.display = 'block';
+      addToCalendarBtn.style.display = 'inline-block';
     }
 
-    // ICS and Google Calendar support
-
-    function getReminderDate(type) {
-      return type === 'second' ? '2025-12-11' : '2026-03-10';
+    // Helper to format date for ICS (YYYYMMDD)
+    function formatDateICS(dateStr) {
+      const date = new Date(dateStr);
+      const year = date.getUTCFullYear();
+      const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+      const day = date.getUTCDate().toString().padStart(2, '0');
+      return `${year}${month}${day}`;
     }
 
-    function formatICSDate(date) {
-      // YYYYMMDDTHHMMSSZ format
-      return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    }
-
-    function createICS(dateStr, title) {
-      const start = new Date(dateStr + 'T09:00:00');
-      const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour later
-
-      const startDate = formatICSDate(start);
-      const endDate = formatICSDate(end);
-
-      const icsContent =
+    // Generates ICS content for one event
+    function generateICSContent(title, description, dueDate) {
+      const dtstamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      const dtstart = formatDateICS(dueDate);
+      const dtend = formatDateICS(dueDate);
+      return (
         'BEGIN:VCALENDAR\n' +
         'VERSION:2.0\n' +
+        'PRODID:-//D&R Wedding//Room Payment Reminder//EN\n' +
         'BEGIN:VEVENT\n' +
-        'UID:' + Date.now() + '@kirkwoodwedding.com\n' +
-        'DTSTAMP:' + formatICSDate(new Date()) + '\n' +
-        'SUMMARY:' + title + '\n' +
-        'DESCRIPTION:Room payment reminder for ' + title + '\n' +
-        'LOCATION:Online\n' +
-        'DTSTART:' + startDate + '\n' +
-        'DTEND:' + endDate + '\n' +
+        `UID:${Math.random().toString(36).substring(2)}@drwedding.com\n` +
+        `DTSTAMP:${dtstamp}\n` +
+        `SUMMARY:${title}\n` +
+        `DESCRIPTION:${description}\n` +
+        `DTSTART;VALUE=DATE:${dtstart}\n` +
+        `DTEND;VALUE=DATE:${dtend}\n` +
         'END:VEVENT\n' +
-        'END:VCALENDAR';
+        'END:VCALENDAR'
+      );
+    }
 
-      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    function downloadICS(filename, content) {
+      const blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `payment-reminder-${dateStr}.ics`;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     }
 
-    function openGoogleCalendar(dateStr, title) {
-      const start = new Date(dateStr + 'T09:00:00');
-      const end = new Date(start.getTime() + 60 * 60 * 1000);
+    function addBothReminders(plan) {
+      // 2nd Payment Reminder
+      const title1 = 'D&R Wedding 2nd Room Payment Due';
+      const desc1 = `Room payment reminder for 2nd Room Payment Due\nAmount Due: ${formatCurrency(plan.firstPayment)}\nDue Date: ${plan.firstDue}\nPlease make sure to pay the 2nd payment on time.`;
+      const ics1 = generateICSContent(title1, desc1, plan.firstDue);
+      downloadICS('D&R-Wedding-2nd-Room-Payment-Due.ics', ics1);
 
-      function formatGoogleDate(date) {
-        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      // Final Payment Reminder
+      const title2 = 'D&R Wedding Final Room Payment Due';
+      const desc2 = `Room payment reminder for Final Room Payment Due\nAmount Due: ${formatCurrency(plan.finalPayment)}\nDue Date: ${plan.finalDue}\nPlease make sure to pay the final payment on time.`;
+      const ics2 = generateICSContent(title2, desc2, plan.finalDue);
+      downloadICS('D&R-Wedding-Final-Room-Payment-Due.ics', ics2);
+    }
+
+    calculateBtn.addEventListener('click', () => {
+      const room = roomTypeSelect.value;
+      const occ = occupancySelect.value;
+      const nights = nightsSelect.value;
+
+      if (!room || !occ || !nights) {
+        resultDiv.textContent = 'Please select all options.';
+        addToCalendarBtn.style.display = 'none';
+        return;
       }
 
-      const details = encodeURIComponent('Room payment reminder for ' + title);
-      const location = encodeURIComponent('Online');
-      const dates = `${formatGoogleDate(start)}/${formatGoogleDate(end)}`;
-      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${dates}&details=${details}&location=${location}`;
+      const currentPlan = generatePaymentPlan(room, occ, parseInt(nights));
+      displayResult(currentPlan);
 
-      window.open(url, '_blank');
-    }
-
-    downloadICSBtn.addEventListener('click', () => {
-      const type = calendarDateSelect.value;
-      const dateStr = getReminderDate(type);
-      const title = type === 'second' ? '2nd Room Payment Due' : 'Final Room Payment Due';
-      createICS(dateStr, title);
+      // Save currentPlan for calendar button usage
+      addToCalendarBtn.currentPlan = currentPlan;
     });
 
-    googleCalBtn.addEventListener('click', () => {
-      const type = calendarDateSelect.value;
-      const dateStr = getReminderDate(type);
-      const title = type === 'second' ? '2nd Room Payment Due' : 'Final Room Payment Due';
-      openGoogleCalendar(dateStr, title);
+    addToCalendarBtn.addEventListener('click', () => {
+      if (addToCalendarBtn.currentPlan) {
+        addBothReminders(addToCalendarBtn.currentPlan);
+      }
     });
   </script>
 </body>
