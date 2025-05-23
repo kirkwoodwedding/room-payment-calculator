@@ -4,203 +4,236 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Room Payment Calculator</title>
-
-  <!-- Google Fonts: Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
   <style>
-   body {
-  font-family: 'Poppins', sans-serif;
-  background: 
-    linear-gradient(rgba(253, 253, 253, 0.85), rgba(253, 253, 253, 0.85)),
-    url('https://drive.google.com/uc?export=view&id=1EH41ikU-pGX8syf2kkU6ekOTtd2N7z6K') no-repeat center center fixed;
-  background-size: cover;
-  color: #333;
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 20px;
-  line-height: 1.5;
-  min-height: 100vh;
-}
-    h2 {
-      text-align: center;
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Poppins', sans-serif;
     }
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 600;
+    .background-container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-map {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.15;
+    }
+
+    .heart-icon {
+      position: absolute;
+      top: 54%;   /* Cancun position */
+      left: 62%;
+      font-size: 2.5rem;
+      color: #c94f4f;
+      text-shadow: 0 0 6px rgba(0,0,0,0.3);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .content-container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      line-height: 1.5;
+      color: #333;
+    }
+
+    label, select, button {
+      font-family: 'Poppins', sans-serif;
     }
 
     select, button {
       width: 100%;
+      margin-bottom: 15px;
       padding: 10px;
-      margin-top: 5px;
-      font-size: 1em;
+      font-size: 1rem;
       border-radius: 5px;
       border: 1px solid #ccc;
-    }
-
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 0 5px #aaa;
+      box-sizing: border-box;
     }
 
     button {
-      background: #5c7f67;
+      background-color: #a2b29f; /* soft sage */
       color: white;
       border: none;
-      margin-top: 10px;
-      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background: #4b6954;
+      background-color: #899b87;
+    }
+
+    .result {
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 1.2rem;
     }
   </style>
 </head>
-
 <body>
+  <div class="background-container">
+    <img src="https://i.imgur.com/IDvkwbd.png" alt="Watercolor Mexico Map" class="bg-map" />
+    <div class="heart-icon" aria-label="Cancun location">❤️</div>
+  </div>
 
-  <h2>Room Payment Calculator</h2>
+  <div class="content-container">
+    <h1>Room Payment Calculator</h1>
 
-  <label for="roomType">Room Type</label>
-  <select id="roomType">
-    <option value="">-- Select Room --</option>
-    <option value="Junior Suite">Junior Suite</option>
-    <option value="Junior Suite Ocean View">Junior Suite Ocean View</option>
-    <option value="INSPIRA Swim Out">INSPIRA Swim Out</option>
-    <option value="Inspira Terrace">Inspira Terrace</option>
-  </select>
+    <label for="roomType">Select Room Type:</label>
+    <select id="roomType">
+      <option value="" disabled selected>Select room</option>
+      <option value="juniorSuite">Junior Suite</option>
+      <option value="juniorSuiteOceanView">Junior Suite Ocean View</option>
+      <option value="inspiraSwimOut">INSPIRA Swim Out</option>
+      <option value="inspiraTerrace">Inspira Terrace</option>
+    </select>
 
-  <label for="occupancy">Occupancy</label>
-  <select id="occupancy">
-    <option value="">-- Select Occupancy --</option>
-    <option value="Single">Single</option>
-    <option value="Double">Double</option>
-    <option value="Triple">Triple</option>
-  </select>
+    <label for="occupancy">Number of Guests in Room:</label>
+    <select id="occupancy">
+      <option value="" disabled selected>Select occupancy</option>
+      <option value="single">Single</option>
+      <option value="double">Double</option>
+      <option value="triple">Triple</option>
+    </select>
 
-  <label for="nights">Number of Nights</label>
-  <select id="nights">
-    <option value="">-- Select Nights --</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-  </select>
+    <label for="nights">Number of Nights:</label>
+    <select id="nights">
+      <option value="" disabled selected>Select nights</option>
+      <option value="3">3 Nights</option>
+      <option value="4">4 Nights</option>
+      <option value="5">5 Nights</option>
+    </select>
 
-  <div class="result" id="result" style="display:none;">
-    <p><strong>Total Price:</strong> $<span id="totalPrice"></span></p>
-    <p><strong>Deposit:</strong> $400</p>
-    <p><strong>First Payment Due (Dec 11, 2025):</strong> $<span id="firstPayment"></span></p>
-    <p><strong>Final Payment Due (Mar 10, 2026):</strong> $<span id="finalPayment"></span></p>
+    <button id="calculateBtn">Calculate Payment</button>
 
-    <button id="downloadCalendar">Add to Calendar</button>
+    <div class="result" id="result"></div>
+
+    <button id="addToCalendarBtn" style="display:none;">Add to Calendar</button>
   </div>
 
   <script>
-    const pricing = {
-      "Junior Suite": {
-        "Single": { "3": 1654.99, "4": 2192.65, "5": 2730.31 },
-        "Double": { "3": 1981.40, "4": 2613.88, "5": 3246.34 },
-        "Triple": { "3": 2974.05, "4": 3923.40, "5": 4872.75 }
+    // Prices object from your spreadsheet data
+    const prices = {
+      juniorSuite: {
+        single: {3: 1654.99, 4: 2192.65, 5: 2730.31},
+        double: {3: 1981.40, 4: 2613.88, 5: 3246.34},
+        triple: {3: 2974.05, 4: 3923.40, 5: 4872.75}
       },
-      "Junior Suite Ocean View": {
-        "Single": { "3": 1717.32, "4": 2275.77, "5": 2834.21 },
-        "Double": { "3": 2051.54, "4": 2707.38, "5": 3363.22 },
-        "Triple": { "3": 3079.26, "4": 4063.65, "5": 5048.07 }
+      juniorSuiteOceanView: {
+        single: {3: 1717.32, 4: 2275.77, 5: 2834.21},
+        double: {3: 2051.54, 4: 2707.38, 5: 3363.22},
+        triple: {3: 3079.26, 4: 4063.65, 5: 5048.07}
       },
-      "INSPIRA Swim Out": {
-        "Single": { "3": 3139.40, "4": 4171.87, "5": 5204.34 },
-        "Double": { "3": 3181.40, "4": 4213.88, "5": 5246.34 },
-        "Triple": { "3": 4770.15, "4": 6318.21, "5": 7866.27 }
+      inspiraSwimOut: {
+        single: {3: 3139.40, 4: 4171.87, 5: 5204.34},
+        double: {3: 3181.40, 4: 4213.88, 5: 5246.34},
+        triple: {3: 4770.15, 4: 6318.21, 5: 7866.27}
       },
-      "Inspira Terrace": {
-        "Single": { "3": 3139.40, "4": 4171.87, "5": 5204.34 },
-        "Double": { "3": 3181.40, "4": 4213.88, "5": 5246.34 },
-        "Triple": { "3": 4770.15, "4": 6318.21, "5": 7866.27 }
+      inspiraTerrace: {
+        single: {3: 3139.40, 4: 4171.87, 5: 5204.34},
+        double: {3: 3181.40, 4: 4213.88, 5: 5246.34},
+        triple: {3: 4770.15, 4: 6318.21, 5: 7866.27}
       }
     };
 
     const deposit = 400;
-    const firstDueDate = new Date('2025-12-11');
-    const finalDueDate = new Date('2026-03-10');
+    const firstDueDate = '2025-12-11';
+    const secondDueDate = '2026-03-10';
 
-    const roomType = document.getElementById('roomType');
-    const occupancy = document.getElementById('occupancy');
-    const nights = document.getElementById('nights');
+    const roomTypeSelect = document.getElementById('roomType');
+    const occupancySelect = document.getElementById('occupancy');
+    const nightsSelect = document.getElementById('nights');
+    const calculateBtn = document.getElementById('calculateBtn');
     const resultDiv = document.getElementById('result');
-    const totalPriceSpan = document.getElementById('totalPrice');
-    const firstPaymentSpan = document.getElementById('firstPayment');
-    const finalPaymentSpan = document.getElementById('finalPayment');
-    const downloadCalendarBtn = document.getElementById('downloadCalendar');
+    const addToCalendarBtn = document.getElementById('addToCalendarBtn');
 
-    function calculate() {
-      const r = roomType.value;
-      const o = occupancy.value;
-      const n = nights.value;
-
-      if (r && o && n) {
-        const total = pricing[r][o][n];
-        totalPriceSpan.textContent = total.toFixed(2);
-
-        const firstPayment = (total / 2) - deposit;
-        firstPaymentSpan.textContent = firstPayment.toFixed(2);
-
-        const finalPayment = total / 2;
-        finalPaymentSpan.textContent = finalPayment.toFixed(2);
-
-        resultDiv.style.display = 'block';
-      } else {
-        resultDiv.style.display = 'none';
-      }
+    function formatCurrency(num) {
+      return '$' + num.toFixed(2);
     }
 
-    function formatDateForICS(date) {
-      return date.toISOString().replace(/[-:]|\.\d{3}/g, '').substring(0, 8);
+    function generatePaymentPlan(room, occ, nights) {
+      const totalPrice = prices[room][occ][nights];
+      const halfPrice = totalPrice / 2;
+      return {
+        total: totalPrice,
+        deposit,
+        firstPayment: halfPrice - deposit,
+        firstDue: firstDueDate,
+        secondPayment: halfPrice,
+        secondDue: secondDueDate
+      };
+    }
+
+    function displayResult(plan) {
+      resultDiv.innerHTML = `
+        <p>Total Price: <strong>${formatCurrency(plan.total)}</strong></p>
+        <p>Deposit Paid: <strong>${formatCurrency(plan.deposit)}</strong></p>
+        <p>First Payment (50% minus deposit): <strong>${formatCurrency(plan.firstPayment)}</strong> due by ${plan.firstDue}</p>
+        <p>Second Payment (Remaining 50%): <strong>${formatCurrency(plan.secondPayment)}</strong> due by ${plan.secondDue}</p>
+      `;
+      addToCalendarBtn.style.display = 'inline-block';
     }
 
     function generateICS() {
-      const dt1 = formatDateForICS(firstDueDate);
-      const dt2 = formatDateForICS(finalDueDate);
+      const plan = currentPlan;
+      if (!plan) return;
 
-      const icsContent =
-`BEGIN:VCALENDAR
-VERSION:2.0
-CALSCALE:GREGORIAN
-BEGIN:VEVENT
-SUMMARY:Room Payment – First Half Due
-DESCRIPTION:Your first 50% payment (minus $400 deposit) is due.
-DTSTART;VALUE=DATE:${dt1}
-DTEND;VALUE=DATE:${dt1}
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Room Payment – Final Balance Due
-DESCRIPTION:Your final 50% payment is due.
-DTSTART;VALUE=DATE:${dt2}
-DTEND;VALUE=DATE:${dt2}
-END:VEVENT
-END:VCALENDAR`;
+      const icsLines = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Wedding Payment Plan//EN',
+        'BEGIN:VEVENT',
+        `SUMMARY:First Payment Due - $${plan.firstPayment.toFixed(2)}`,
+        `DTSTART;VALUE=DATE:${plan.firstDue.replace(/-/g, '')}`,
+        'DESCRIPTION:Deposit paid $400. Remaining payment due.',
+        'END:VEVENT',
+        'BEGIN:VEVENT',
+        `SUMMARY:Second Payment Due - $${plan.secondPayment.toFixed(2)}`,
+        `DTSTART;VALUE=DATE:${plan.secondDue.replace(/-/g, '')}`,
+        'DESCRIPTION:Final payment due for your room.',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ];
 
-      const blob = new Blob([icsContent], { type: 'text/calendar' });
+      const blob = new Blob([icsLines.join('\r\n')], {type: 'text/calendar'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'Room_Payment_Reminders.ics';
-      document.body.appendChild(a);
+      a.download = 'payment-reminders.ics';
       a.click();
-      document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
 
-    roomType.addEventListener('change', calculate);
-    occupancy.addEventListener('change', calculate);
-    nights.addEventListener('change', calculate);
-    downloadCalendarBtn.addEventListener('click', generateICS);
-  </script>
+    let currentPlan = null;
 
+    calculateBtn.addEventListener('click', () => {
+      const room = roomTypeSelect.value;
+      const occ = occupancySelect.value;
+      const nights = nightsSelect.value;
+
+      if (!room || !occ || !nights) {
+        alert('Please select all options.');
+        return;
+      }
+
+      currentPlan = generatePaymentPlan(room, occ, parseInt(nights));
+      displayResult(currentPlan);
+    });
+
+    addToCalendarBtn.addEventListener('click', generateICS);
+  </script>
 </body>
 </html>
