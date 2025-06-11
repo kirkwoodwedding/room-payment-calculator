@@ -309,21 +309,21 @@
   const calendarSection = document.getElementById('calendarSection');
 
   if (!roomType || !occupancy || !nights) {
-    resultDiv.textContent = 'Please select all options.';
-    breakdownDiv.style.display = 'none';
-    calendarSection.style.display = 'none';
-    return;
-  }
+  resultDiv.textContent = 'Please select all options.';
+  breakdownDiv.style.display = 'none';
+  calendarSection.style.display = 'none';
+  return;
+}
 
-    const deposit = 400;
-    
-    // Look up the total cost directly from your price table
-    const totalCost = prices[roomType][occupancy][nights];
-    
-    // Calculate the second and final payments
-    const secondPayment = ((totalCost / 2) - deposit).toFixed(2);
-    const finalPayment = (totalCost / 2).toFixed(2);
+const deposit = 400;
 
+// Look up the total cost directly from your full price table
+const totalCost = prices[roomType][occupancy][nights];
+
+// Calculate remaining balance and split it evenly
+const remaining = totalCost - deposit;
+const secondPayment = (remaining / 2).toFixed(2);
+const finalPayment = (remaining / 2).toFixed(2);
 
   resultDiv.innerHTML = `
     <p><strong>Total cost for your stay:</strong> $${totalCost.toFixed(2)}</p>
