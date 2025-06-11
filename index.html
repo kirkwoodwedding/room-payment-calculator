@@ -148,41 +148,57 @@
       padding: 15px;
       border-radius: 8px;
     }
-    <style>
-    .accordion-answer {
-      display: none;
-      margin-top: 10px;
-    }
-  
-    .accordion-item.active .accordion-answer {
-      display: block;
-    }
-  
+
+    /* FAQ Accordion styles */
     .accordion-question {
-      background: none;
-      border: none;
-      font-size: 1rem;
-      padding: 10px 0;
-      width: 100%;
-      text-align: left;
+      background-color: #5d7263;
+      color: white;
       cursor: pointer;
-      font-weight: bold;
-      position: relative;
-    }
-  
-    .accordion-question::after {
-      content: "▼";
-      position: absolute;
-      right: 0;
-      transition: transform 0.3s ease;
-    }
-  
-    .accordion-item.active .accordion-question::after {
-      transform: rotate(180deg);
+      padding: 14px 20px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 1rem;
+      margin-top: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      text-transform: uppercase;
     }
 
+    .accordion-question:hover,
+    .accordion-item.active .accordion-question {
+      background-color: #4a5d50;
+    }
+
+    .accordion-answer {
+      padding: 0 20px;
+      background-color: rgba(162, 178, 159, 0.3);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      border-radius: 0 0 5px 5px;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .accordion-item.active .accordion-answer {
+      max-height: 1000px;
+    }
+
+    .accordion-question::after {
+      content: '▾';
+      float: right;
+      transition: transform 0.3s ease;
+    }
+
+    .accordion-item.active .accordion-question::after {
+      transform: rotate(-180deg);
+    }
   </style>
 </head>
+  
 <body>
   <div class="background-container">
     <img src="https://kirkwoodwedding.github.io/room-payment-calculator/watercolor2.JPG" alt="Background" class="bg-map" />
