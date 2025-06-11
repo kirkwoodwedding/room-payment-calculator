@@ -278,10 +278,26 @@
 </div>
   <script>
     const prices = {
-      juniorSuite: { single: 265, double: 265, triple: 309 },
-      juniorSuiteOceanView: { single: 305, double: 305, triple: 345 },
-      inspiraSwimOut: { single: 330, double: 330, triple: 370 },
-      inspiraTerrace: { single: 330, double: 330, triple: 370 }
+      juniorSuite: {
+        single: { 3: 1654.99, 4: 2192.65, 5: 2730.31 },
+        double: { 3: 1981.40, 4: 2613.88, 5: 3246.34 },
+        triple: { 3: 2974.05, 4: 3923.40, 5: 4872.75 }
+      },
+      juniorSuiteOceanView: {
+        single: { 3: 1717.32, 4: 2275.77, 5: 2834.21 },
+        double: { 3: 2051.54, 4: 2707.38, 5: 3363.22 },
+        triple: { 3: 3079.26, 4: 4063.65, 5: 5048.07 }
+      },
+      inspiraSwimOut: {
+        single: { 3: 3139.40, 4: 4171.87, 5: 5204.34 },
+        double: { 3: 3181.40, 4: 4213.88, 5: 5246.34 },
+        triple: { 3: 4770.15, 4: 6318.21, 5: 7866.27 }
+      },
+      inspiraTerrace: {
+        single: { 3: 3139.40, 4: 4171.87, 5: 5204.34 },
+        double: { 3: 3181.40, 4: 4213.88, 5: 5246.34 },
+        triple: { 3: 4770.15, 4: 6318.21, 5: 7866.27 }
+      }
     };
 
      document.getElementById('calculateBtn').addEventListener('click', () => {
@@ -299,11 +315,15 @@
     return;
   }
 
-  const rate = prices[roomType][occupancy];
-  const totalCost = rate * nights;
-  const deposit = 400;
-  const secondPayment = ((totalCost - deposit) / 2).toFixed(2);
-  const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
+    const deposit = 400;
+    
+    // Look up the total cost directly from your price table
+    const totalCost = prices[roomType][occupancy][nights];
+    
+    // Calculate the second and final payments
+    const secondPayment = ((totalCost / 2) - deposit).toFixed(2);
+    const finalPayment = (totalCost / 2).toFixed(2);
+
 
   resultDiv.innerHTML = `
     <p><strong>Total cost for your stay:</strong> $${totalCost.toFixed(2)}</p>
