@@ -169,6 +169,14 @@
 
     .accordion-item.active .accordion-answer {
       max-height: 1000px;
+    .accordion-question::after {
+      content: '▾';
+      float: right;
+      transition: transform 0.3s ease;
+    }
+
+    .accordion-item.active .accordion-question::after {
+      transform: rotate(-180deg);
     }
   </style>
 </head>
