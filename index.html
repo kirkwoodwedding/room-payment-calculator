@@ -91,6 +91,20 @@
       font-size: 1.2rem;
     }
 
+    .payment-breakdown {
+      background-color: #fff;
+      border-radius: 6px;
+      padding: 15px 20px;
+      margin-top: 15px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .payment-breakdown p {
+      margin: 8px 0;
+    }
+
     .booking-section {
       background-color: var(--offwhite);
       margin-top: 40px;
@@ -134,52 +148,6 @@
       padding: 15px;
       border-radius: 8px;
     }
-
-    .accordion-question {
-      background-color: #a9bba2;
-      color: #2f2f2f;
-      cursor: pointer;
-      padding: 14px 20px;
-      width: 100%;
-      border: none;
-      text-align: left;
-      outline: none;
-      font-size: 1rem;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 500;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
-
-    .accordion-question:hover,
-    .accordion-question.active {
-      background-color: #94a890;
-    }
-
-    .accordion-answer {
-      padding: 0 20px 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      overflow: hidden;
-      max-height: 0;
-      transition: max-height 0.3s ease;
-      border-radius: 0 0 5px 5px;
-      font-size: 0.95rem;
-      color: #333;
-    }
-
-    .accordion-item.active .accordion-answer {
-      max-height: 1000px;
-    }
-    
-    .accordion-question::after {
-      content: '▾';
-      float: right;
-      transition: transform 0.3s ease;
-    }
-
-    .accordion-item.active .accordion-question::after {
-      transform: rotate(-180deg);
-    }
   </style>
 </head>
 <body>
@@ -195,7 +163,7 @@
       <option value="juniorSuite">Junior Suite</option>
       <option value="juniorSuiteOceanView">Junior Suite Ocean View</option>
       <option value="inspiraSwimOut">INSPIRA Swim Out</option>
-      <option value="inspiraTerrace">Inspira Terrace</option>
+      <option value="inspiraTerrace">INSPIRA Terrace</option>
     </select>
 
     <label for="occupancy">Number of Guests in Room:</label>
@@ -308,9 +276,8 @@
     </div>
   </div>
 </div>
-
-<script>
-  const prices = {
+  <script>
+    const prices = {
       juniorSuite: { single: 265, double: 265, triple: 309 },
       juniorSuiteOceanView: { single: 305, double: 305, triple: 345 },
       inspiraSwimOut: { single: 330, double: 330, triple: 370 },
@@ -322,9 +289,11 @@
       const occupancy = document.getElementById('occupancy').value;
       const nights = parseInt(document.getElementById('nights').value);
       const resultDiv = document.getElementById('result');
+      const breakdownDiv = document.getElementById('paymentBreakdown');
 
       if (!roomType || !occupancy || !nights) {
         resultDiv.textContent = 'Please select all options.';
+        breakdownDiv.style.display = 'none';
         return;
       }
 
@@ -334,7 +303,10 @@
       const secondPayment = ((totalCost - deposit) / 2).toFixed(2);
       const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
 
-      resultDiv.textContent = `Total cost for your stay: $${totalCost.toFixed(2)}`;
+      resultDiv.innerHTML = `
+        <p><strong>Total cost for your stay:</strong> $${totalCost.toFixed(2)}</p>
+      `;
+
       breakdownDiv.innerHTML = `
         <p><strong>Deposit:</strong> $${deposit}</p>
         <p><strong>2nd Payment (due Dec 11, 2025):</strong> $${secondPayment}</p>
@@ -342,7 +314,7 @@
       `;
       breakdownDiv.style.display = 'block';
     });
-
+    
     const events = {
       secondPayment: {
         title: "D&R Wedding 2nd Room Payment Due",
