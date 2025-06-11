@@ -291,31 +291,41 @@
       const resultDiv = document.getElementById('result');
       const breakdownDiv = document.getElementById('paymentBreakdown');
 
-      if (!roomType || !occupancy || !nights) {
-        resultDiv.textContent = 'Please select all options.';
-        breakdownDiv.style.display = 'block';
-        document.getElementById('calendarSection').style.display = 'block';
+     document.getElementById('calculateBtn').addEventListener('click', () => {
+  const roomType = document.getElementById('roomType').value;
+  const occupancy = document.getElementById('occupancy').value;
+  const nights = parseInt(document.getElementById('nights').value);
+  const resultDiv = document.getElementById('result');
+  const breakdownDiv = document.getElementById('paymentBreakdown');
+  const calendarSection = document.getElementById('calendarSection');
 
-        return;
-      }
+  if (!roomType || !occupancy || !nights) {
+    resultDiv.textContent = 'Please select all options.';
+    breakdownDiv.style.display = 'none';
+    calendarSection.style.display = 'none';
+    return;
+  }
 
-      const rate = prices[roomType][occupancy];
-      const totalCost = rate * nights;
-      const deposit = 400;
-      const secondPayment = ((totalCost - deposit) / 2).toFixed(2);
-      const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
+  const rate = prices[roomType][occupancy];
+  const totalCost = rate * nights;
+  const deposit = 400;
+  const secondPayment = ((totalCost - deposit) / 2).toFixed(2);
+  const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
 
-      resultDiv.innerHTML = `
-        <p><strong>Total cost for your stay:</strong> $${totalCost.toFixed(2)}</p>
-      `;
+  resultDiv.innerHTML = `
+    <p><strong>Total cost for your stay:</strong> $${totalCost.toFixed(2)}</p>
+  `;
 
-      breakdownDiv.innerHTML = `
-        <p><strong>Deposit:</strong> $${deposit}</p>
-        <p><strong>2nd Payment (due Dec 11, 2025):</strong> $${secondPayment}</p>
-        <p><strong>Final Payment (due Mar 10, 2026):</strong> $${finalPayment}</p>
-      `;
-      breakdownDiv.style.display = 'block';
-    });
+  breakdownDiv.innerHTML = `
+    <p><strong>Deposit:</strong> $${deposit}</p>
+    <p><strong>2nd Payment (due Dec 11, 2025):</strong> $${secondPayment}</p>
+    <p><strong>Final Payment (due Mar 10, 2026):</strong> $${finalPayment}</p>
+  `;
+
+  breakdownDiv.style.display = 'block';
+  calendarSection.style.display = 'block'; // ✅ Only show calendar if inputs are valid
+});
+
     
     const events = {
       secondPayment: {
