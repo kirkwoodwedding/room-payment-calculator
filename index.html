@@ -172,15 +172,6 @@
   }
   </style>
   
-  <script>
-    document.querySelectorAll('.accordion-question').forEach(button => {
-      button.addEventListener('click', () => {
-        const item = button.parentElement;
-        item.classList.toggle('active');
-      });
-    });
-  </script>
-  
   <body>
     <div class="background-container">
       <img src="https://kirkwoodwedding.github.io/room-payment-calculator/watercolor2.JPG" alt="Background" class="bg-map" />
@@ -382,11 +373,11 @@
     });
 
     // Chevron accordion interaction
-    document.querySelectorAll('.accordion-question').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('active');
-        const answer = btn.nextElementSibling;
-        answer.classList.toggle('open');
+      <script>
+    document.querySelectorAll('.accordion-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        item.classList.toggle('active');
       });
     });
   </script>
