@@ -148,6 +148,39 @@
       padding: 15px;
       border-radius: 8px;
     }
+    <style>
+    .accordion-answer {
+      display: none;
+      margin-top: 10px;
+    }
+  
+    .accordion-item.active .accordion-answer {
+      display: block;
+    }
+  
+    .accordion-question {
+      background: none;
+      border: none;
+      font-size: 1rem;
+      padding: 10px 0;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-weight: bold;
+      position: relative;
+    }
+  
+    .accordion-question::after {
+      content: "▼";
+      position: absolute;
+      right: 0;
+      transition: transform 0.3s ease;
+    }
+  
+    .accordion-item.active .accordion-question::after {
+      transform: rotate(180deg);
+    }
+
   </style>
 </head>
 <body>
