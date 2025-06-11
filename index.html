@@ -316,54 +316,55 @@
     });
     
     const events = {
-      secondPayment: {
-        title: "D&R Wedding 2nd Room Payment Due",
-        description: "Reminder to make the second room payment for Devin and Rina's wedding.",
-        location: "Online",
-        startDate: "2025-12-11T00:00:00",
-        endDate: "2025-12-11T23:59:59"
-      },
-      finalPayment: {
-        title: "D&R Wedding Final Room Payment Due",
-        description: "Reminder to make the final room payment for Devin and Rina's wedding.",
-        location: "Online",
-        startDate: "2026-03-10T00:00:00",
-        endDate: "2026-03-10T23:59:59"
-      },
-      travelDates: {
-        title: "D&R Wedding Travel Dates",
-        description: "Travel dates for Devin and Rina's wedding celebration.",
-        location: "Punta Cana",
-        startDate: "2026-07-17T15:00:00",
-        endDate: "2026-07-22T11:00:00"
-      }
-    };
+  secondPayment: {
+    title: "D&R Wedding 2nd Room Payment Due",
+    description: "Reminder to make the second room payment for Devin and Rina's wedding.",
+    location: "Online",
+    startDate: "2025-12-11T00:00:00",
+    endDate: "2025-12-11T23:59:59"
+  },
+  finalPayment: {
+    title: "D&R Wedding Final Room Payment Due",
+    description: "Reminder to make the final room payment for Devin and Rina's wedding.",
+    location: "Online",
+    startDate: "2026-03-10T00:00:00",
+    endDate: "2026-03-10T23:59:59"
+  },
+  travelDates: {
+    title: "D&R Wedding Travel Dates",
+    description: "Travel dates for Devin and Rina's wedding celebration.",
+    location: "Atelier Playa Mujeres",
+    startDate: "2026-07-14T15:00:00",
+    endDate: "2026-07-19T11:00:00"
+  }
+};
 
-    function formatDateToICS(dateStr) {
-      return new Date(dateStr).toISOString().replace(/[-:]|\.\d{3}/g, '');
-    }
+function formatDateToICS(dateStr) {
+  return new Date(dateStr).toISOString().replace(/[-:]|\.\d{3}/g, '');
+}
 
-    document.getElementById('addIcsBtn').addEventListener('click', () => {
-      const type = document.getElementById('reminderType').value;
-      if (!type) return alert('Select a reminder type');
-      const e = events[type];
-      const content = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${e.title}\nDESCRIPTION:${e.description}\nLOCATION:${e.location}\nDTSTART:${formatDateToICS(e.startDate)}\nDTEND:${formatDateToICS(e.endDate)}\nEND:VEVENT\nEND:VCALENDAR`;
-      const blob = new Blob([content], { type: 'text/calendar' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'event.ics';
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    });
+document.getElementById('addIcsBtn').addEventListener('click', () => {
+  const type = document.getElementById('reminderType').value;
+  if (!type) return alert('Select a reminder type');
+  const e = events[type];
+  const content = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${e.title}\nDESCRIPTION:${e.description}\nLOCATION:${e.location}\nDTSTART:${formatDateToICS(e.startDate)}\nDTEND:${formatDateToICS(e.endDate)}\nEND:VEVENT\nEND:VCALENDAR`;
+  const blob = new Blob([content], { type: 'text/calendar' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'event.ics';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+});
 
-    document.getElementById('addGoogleBtn').addEventListener('click', () => {
-      const type = document.getElementById('reminderType').value;
-      if (!type) return alert('Select a reminder type');
-      const e = events[type];
-      const start = formatDateToICS(e.startDate);
-      const end = formatDateToICS(e.endDate);
-      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(e.title)}&details=${encodeURIComponent(e.description)}&location=${encodeURIComponent(e.location)}&dates=${start}/${end}`;
-      window.open(url, '_blank');
-    });
+document.getElementById('addGoogleBtn').addEventListener('click', () => {
+  const type = document.getElementById('reminderType').value;
+  if (!type) return alert('Select a reminder type');
+  const e = events[type];
+  const start = formatDateToICS(e.startDate);
+  const end = formatDateToICS(e.endDate);
+  const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(e.title)}&details=${encodeURIComponent(e.description)}&location=${encodeURIComponent(e.location)}&dates=${start}/${end}`;
+  window.open(url, '_blank');
+});
+
 
     // Chevron accordion interaction
     document.querySelectorAll('.accordion-question').forEach(button => {
