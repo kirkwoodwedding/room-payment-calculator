@@ -293,7 +293,9 @@
 
       if (!roomType || !occupancy || !nights) {
         resultDiv.textContent = 'Please select all options.';
-        breakdownDiv.style.display = 'none';
+        breakdownDiv.style.display = 'block';
+        document.getElementById('calendarSection').style.display = 'block';
+
         return;
       }
 
