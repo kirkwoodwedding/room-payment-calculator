@@ -4,13 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Room Payment Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&family=Italiana&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --sage: #a2b29f;
+      --sage-dark: #5d7263;
+      --sage-darker: #4a5d50;
+      --offwhite: rgba(255, 255, 255, 0.85);
+      --text-dark: #333;
+    }
+
     body, html {
       margin: 0;
       padding: 0;
       height: 100%;
       font-family: 'Poppins', sans-serif;
+      font-weight: 300;
+      color: var(--text-dark);
+      background-color: #f8f8f8;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Italiana', serif;
+      font-weight: normal;
+      text-transform: uppercase;
+      color: var(--text-dark);
     }
 
     .background-container {
@@ -25,25 +43,24 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 1;
+      opacity: 0.15;
     }
 
     .content-container {
-      max-width: 500px;
+      max-width: 600px;
       margin: 40px auto;
-      background: rgba(162, 178, 159, 0.6);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      min-height: 100vh;
+      background: var(--offwhite);
+      padding: 30px 25px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
       position: relative;
       z-index: 1;
-      line-height: 1.5;
-      color: #333;
+      line-height: 1.6;
     }
 
     label, select, button {
       font-family: 'Poppins', sans-serif;
+      font-weight: 300;
     }
 
     select, button {
@@ -51,13 +68,13 @@
       margin-bottom: 15px;
       padding: 10px;
       font-size: 1rem;
-      border-radius: 5px;
+      border-radius: 6px;
       border: 1px solid #ccc;
       box-sizing: border-box;
     }
 
     button {
-      background-color: #5d7263;
+      background-color: var(--sage-dark);
       color: white;
       border: none;
       cursor: pointer;
@@ -65,7 +82,7 @@
     }
 
     button:hover {
-      background-color: #4a5d50;
+      background-color: var(--sage-darker);
     }
 
     .result {
@@ -75,7 +92,7 @@
     }
 
     .booking-section {
-      background-color: rgba(255, 255, 255, 0.75);
+      background-color: var(--offwhite);
       margin-top: 40px;
       padding: 20px;
       border-radius: 8px;
@@ -83,14 +100,19 @@
     }
 
     .booking-section a {
-      color: #4a5d50;
+      color: var(--sage-darker);
       font-weight: bold;
       text-decoration: none;
     }
+
+    .booking-section a:hover {
+      text-decoration: underline;
+    }
+
     .email-button {
       display: inline-block;
-      background-color: #5d7263;
-      color: white !important; /* Force white text */
+      background-color: var(--sage-dark);
+      color: white !important;
       padding: 12px 18px;
       border-radius: 6px;
       font-size: 1rem;
@@ -100,56 +122,60 @@
       margin-top: 20px;
       transition: background-color 0.3s ease;
     }
-    
-    .email-button:hover {
-      background-color: #4a5d50;
-      color: white !important;
-    }
 
-    .booking-section a:hover {
-      text-decoration: underline;
+    .email-button:hover {
+      background-color: var(--sage-darker);
+      color: white !important;
     }
 
     .calendar-section {
       margin-top: 20px;
-      background: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.9);
       padding: 15px;
       border-radius: 8px;
     }
 
-    .calendar-section label, .calendar-section select, .calendar-section button {
-      margin-bottom: 10px;
+    /* Chevron Accordion */
+    .accordion-item {
+      border-bottom: 1px solid #ccc;
     }
 
-    /* FAQ Accordion styles */
-    .accordion {
-      background-color: #5d7263;
-      color: white;
-      cursor: pointer;
-      padding: 14px 20px;
-      width: 100%;
+    .accordion-question {
+      background: none;
       border: none;
-      text-align: left;
       outline: none;
-      font-size: 1rem;
-      margin-top: 10px;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
+      width: 100%;
+      text-align: left;
+      font-family: 'Italiana', serif;
+      font-size: 1.1rem;
+      font-weight: normal;
+      padding: 15px;
+      position: relative;
+      cursor: pointer;
     }
 
-    .accordion:hover, .accordion.active {
-      background-color: #4a5d50;
+    .accordion-question::after {
+      content: '\25BC';
+      position: absolute;
+      right: 20px;
+      transition: transform 0.3s ease;
     }
 
-    .panel {
-      padding: 0 20px;
-      background-color: rgba(162, 178, 159, 0.3);
+    .accordion-question.active::after {
+      transform: rotate(-180deg);
+    }
+
+    .accordion-answer {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
-      border-radius: 0 0 5px 5px;
+      padding: 0 15px;
       font-size: 0.95rem;
-      color: #333;
+    }
+
+    .accordion-answer.open {
+      max-height: 500px;
+      padding-bottom: 15px;
     }
   </style>
 </head>
@@ -190,7 +216,6 @@
 
     <div class="result" id="result"></div>
 
-    <!-- Calendar Reminder Section -->
     <div class="calendar-section" style="display:none;" id="calendarSection">
       <label for="reminderType">Mark it in your calendar:</label>
       <select id="reminderType">
@@ -198,125 +223,102 @@
         <option value="finalPayment">D&R Wedding Final Room Payment Due</option>
         <option value="travelDates">D&R Wedding Travel Dates</option>
       </select>
-
       <button id="addIcsBtn">Add to Calendar</button>
       <button id="addGoogleBtn">Add to Google Calendar</button>
     </div>
 
     <div class="booking-section">
-      <p><h2>Booking and Payment Information</h2>
+      <h2>Booking and Payment Information</h2>
+      <p>A $400 deposit secures your spot and counts toward your total stay. We’ve got a block of rooms held just for our guests, but availability is limited! Reserve your spot early, avoid the last-minute scramble, and get ready for some serious R&R (plus a little wedding magic with ✨ D&R ✨).</p>
+    </div>
 
-        A $400 deposit secures your spot and counts toward your total stay. 
-        We’ve got a block of rooms held just for our guests, but availability is limited! 
-        Reserve your spot early, avoid the last-minute scramble, and get ready for some serious R&R (plus a little wedding magic with ✨ D&R ✨)
-      </p>
-
-   <!-- FAQ Accordion -->
-<div class="faq-section" style="margin-top: 40px;">
-  <h2>Frequently Asked Questions</h2>
-
-  <button class="accordion">When do I need to make the payments?</button>
-  <div class="panel">
-    <p>Here's the payment timeline!</p>
-    
-      <p><strong>Deposit ($400):</strong> Due as soon as you're ready to book</p>
-      <p><strong>2nd Payment (50% minus deposit):</strong> Due December 11, 2025</p>
-      <p><strong>Final Payment (remaining 50%):</strong> Due March 10, 2026</p>
-    
+    <h2>Frequently Asked Questions</h2>
+<div class="accordion">
+  <div class="accordion-item">
+    <button class="accordion-question">When do I need to make the payments?</button>
+    <div class="accordion-answer">
+      <p><strong>Deposit ($400):</strong> Due as soon as you're ready to book<br>
+      <strong>2nd Payment:</strong> Due December 11, 2025<br>
+      <strong>Final Payment:</strong> Due March 10, 2026</p>
+    </div>
   </div>
 
-  <button class="accordion">How do I book?</button>
-  <div class="panel">
-    <p>Contact our travel agent <strong>Linda Pacey</strong>:<br/>
-    📧 <a href="mailto:Linda@blissfulhoneymoons.com">Linda@blissfulhoneymoons.com</a><br/>
-    📞 <a href="tel:6207981120">620-798-1120</a></p>
-    <p>Or book directly here:<br/>
-    🔗 <a href="https://www.vacationcrm.com/IFrameRegistration/Group?lookupId=95f1f7de-6844-4e22-8db0-e0c4fa33c39d&groupId=2deedfdc-9854-4181-bb2d-1239647257ca" target="_blank" rel="noopener noreferrer">Make a payment</a></p>
+  <div class="accordion-item">
+    <button class="accordion-question">How do I book?</button>
+    <div class="accordion-answer">
+      <p>Contact our travel agent <strong>Linda Pacey</strong>:<br/>
+      📧 <a href="mailto:Linda@blissfulhoneymoons.com">Linda@blissfulhoneymoons.com</a><br/>
+      📞 <a href="tel:6207981120">620-798-1120</a></p>
+      <p>Or book directly here:<br/>
+      🔗 <a href="https://www.vacationcrm.com/IFrameRegistration/Group?lookupId=95f1f7de-6844-4e22-8db0-e0c4fa33c39d&groupId=2deedfdc-9854-4181-bb2d-1239647257ca" target="_blank" rel="noopener noreferrer">Make a payment</a></p>
+    </div>
   </div>
 
-  <button class="accordion">What is included in the price?</button>
-  <div class="panel">
-    <p>As soon as you land in Mexico, everything’s taken care of! Your package includes airport transfers, all meals and drinks (yes, even the snacks and drinks in your room’s mini bar), and full access to the resort’s amenities. That means 12 incredible restaurants, 12 bars, 2 coffee shops, a full fitness center, 3 pools, daily activities, and live entertainment to keep the vibes going day and night.</p> 
-
-<p></p>The only extras? Tee times at the championship golf course, treatments at world-class NUUP Spa, and meals at the Michelin-starred María Dolores (INSPIRA guests get special discounts).
-
-<p></p>🔗 <a href="https://atelierdehoteles.com/atelier-playa-mujeres-all-inclusive-plan" target="_blank" rel="noopener noreferrer">Click here for full details on what’s included.</a>
+  <div class="accordion-item">
+    <button class="accordion-question">What is included in the price?</button>
+    <div class="accordion-answer">
+      <p>As soon as you land in Mexico, everything’s taken care of! Your package includes airport transfers, all meals and drinks (yes, even the snacks and drinks in your room’s mini bar), and full access to the resort’s amenities. That means 12 incredible restaurants, 12 bars, 2 coffee shops, a full fitness center, 3 pools, daily activities, and live entertainment to keep the vibes going day and night.</p> 
+      <p>The only extras? Tee times at the championship golf course, treatments at world-class NUUP Spa, and meals at the Michelin-starred María Dolores (INSPIRA guests get special discounts).</p>
+      <p>🔗 <a href="https://atelierdehoteles.com/atelier-playa-mujeres-all-inclusive-plan" target="_blank" rel="noopener noreferrer">Click here for full details on what’s included.</a></p>
+    </div>
   </div>
 
-  <button class="accordion">What is INSPIRA?</button>
-  <div class="panel">
-    <p>INSPIRA Suites at Atelier Playa Mujeres come with a range of upgraded perks to make your stay even more luxurious. You’ll enjoy early check-in and a special INSPIRA bracelet for preferred status throughout the resort. In your suite, you'll find extras like a premium minibar, pillow and scent menus, and upgraded bath amenities.</p>
-
-<p></p>INSPIRA guests also get access to exclusive areas like the rooftop infinity pool, a reserved beach section with concierge service, the INSPIRA Lounge with gourmet snacks and top-shelf drinks, and the MERA Lounge at Cancún Airport for a more comfortable departure experience. Plus, you’ll receive great discounts on spa treatments, dining at María Dolores, golf, and more. 
-
-<p>🔗 <a href="https://atelierdehoteles.com/atelier-playa-mujeres-inspira-suite" target="_blank" rel="noopener noreferrer">Click here for full details about INSPIRA.</a></p>
-
-That said, the Junior Suites are still incredibly comfortable and beautiful. You’ll be in paradise either way.</p>
+  <div class="accordion-item">
+    <button class="accordion-question">What is INSPIRA?</button>
+    <div class="accordion-answer">
+      <p>INSPIRA Suites at Atelier Playa Mujeres come with a range of upgraded perks to make your stay even more luxurious. You’ll enjoy early check-in and a special INSPIRA bracelet for preferred status throughout the resort. In your suite, you'll find extras like a premium minibar, pillow and scent menus, and upgraded bath amenities.</p>
+      <p>INSPIRA guests also get access to exclusive areas like the rooftop infinity pool, a reserved beach section with concierge service, the INSPIRA Lounge with gourmet snacks and top-shelf drinks, and the MERA Lounge at Cancún Airport for a more comfortable departure experience. Plus, you’ll receive great discounts on spa treatments, dining at María Dolores, golf, and more.</p>
+      <p>🔗 <a href="https://atelierdehoteles.com/atelier-playa-mujeres-inspira-suite" target="_blank" rel="noopener noreferrer">Click here for full details about INSPIRA.</a></p>
+      <p>That said, the Junior Suites are still incredibly comfortable and beautiful. You’ll be in paradise either way.</p>
+    </div>
   </div>
 
-  <button class="accordion">Do I have to book my room through the travel agent or can I book it somewhere else?</button>
-  <div class="panel">
-    <p>To be part of the wedding room block/guest list and receive the special group rate, please book your room through our travel agent. This also ensures smooth ground transportation and a hassle-free check-in experience.</p>
-    <p>Booking elsewhere may result in higher rates, no assistance with transfers or check-in, and extra fees on our end.</p>
+  <div class="accordion-item">
+    <button class="accordion-question">Do I have to book my room through the travel agent or can I book it somewhere else?</button>
+    <div class="accordion-answer">
+      <p>To be part of the wedding room block/guest list and receive the special group rate, please book your room through our travel agent. This also ensures smooth ground transportation and a hassle-free check-in experience.</p>
+      <p>Booking elsewhere may result in higher rates, no assistance with transfers or check-in, and extra fees on our end.</p>
+    </div>
   </div>
 
-  <button class="accordion">Do I have to do the payment plan or can I wait and pay the full cost in March?</button>
-  <div class="panel">
-    <p>To keep everything running smoothly with our room block, all guests will need to follow the payment plan. This helps us make sure everyone’s spot is reserved and everything stays organized.</p>
-    <p>The great news is the payments are spread out to make it easier on your wallet, so no big lump sum all at once!</p>
-    <p>If you have any questions about your payments or need help with anything, feel free to reach out to Linda Pacey at <a href="mailto:Linda@blissfulhoneymoons.com">Linda@blissfulhoneymoons.com</a></p>
+  <div class="accordion-item">
+    <button class="accordion-question">Do I have to do the payment plan or can I wait and pay the full cost in March?</button>
+    <div class="accordion-answer">
+      <p>To keep everything running smoothly with our room block, all guests will need to follow the payment plan. This helps us make sure everyone’s spot is reserved and everything stays organized.</p>
+      <p>The great news is the payments are spread out to make it easier on your wallet, so no big lump sum all at once!</p>
+      <p>If you have any questions about your payments or need help with anything, feel free to reach out to Linda Pacey at <a href="mailto:Linda@blissfulhoneymoons.com">Linda@blissfulhoneymoons.com</a></p>
+    </div>
   </div>
 
-  <button class="accordion">Can I stay more than 5 nights?</button>
-  <div class="panel">
-    <p>If you'd like to arrive before July 14th and/or stay after July 19th, you are more than welcome to book beyond the official room block dates. <a href="mailto:Linda@blissfulhoneymoons.com?subject=Devin and Rina Wedding – Extended Stay Room Request&body=Hi Linda,%0D%0A%0D%0AI'm planning to attend Devin and Rina's wedding and am interested in booking my stay beyond the official room block dates.Here are my details:%0D%0A%0D%0A- Name(s): [Your Full Name(s)]%0D%0A- Preferred Room Type: [Junior Suite, Junior Suite Ocean View, INSPIRA Swim Out, INSPIRA Terrace]%0D%0A-Number of beds: [One or Two]%0D%0A- Desired Check-in Date: [e.g., July 12, 2026]%0D%0A- Desired Check-out Date: [e.g., July 21, 2026]%0D%0A%0D%0APlease let me know if extending my stay is possible and what the next steps are.%0D%0A%0D%0AThanks so much!">Click here to email Linda about booking your stay with your preferred dates.</a></p>
+  <div class="accordion-item">
+    <button class="accordion-question">Can I stay more than 5 nights?</button>
+    <div class="accordion-answer">
+      <p>If you'd like to arrive before July 14th and/or stay after July 19th, you are more than welcome to book beyond the official room block dates. <a href="mailto:Linda@blissfulhoneymoons.com?subject=Devin and Rina Wedding – Extended Stay Room Request&body=Hi Linda,%0D%0A%0D%0AI'm planning to attend Devin and Rina's wedding and am interested in booking my stay beyond the official room block dates.Here are my details:%0D%0A%0D%0A- Name(s): [Your Full Name(s)]%0D%0A- Preferred Room Type: [Junior Suite, Junior Suite Ocean View, INSPIRA Swim Out, INSPIRA Terrace]%0D%0A-Number of beds: [One or Two]%0D%0A- Desired Check-in Date: [e.g., July 12, 2026]%0D%0A- Desired Check-out Date: [e.g., July 21, 2026]%0D%0A%0D%0APlease let me know if extending my stay is possible and what the next steps are.%0D%0A%0D%0AThanks so much!">Click here to email Linda about booking your stay with your preferred dates.</a></p>
+    </div>
   </div>
 
-  <button class="accordion">The room I want to reserve is unavailable on the booking link. Do I have to choose a different room instead?</button>
-  <div class="panel">
-    <p>We did our best to reserve rooms based on everyone’s preferences from the form, but rooms are first-come, first-served once deposits start coming in.</p>
-    <p>If your preferred room type isn't available through the booking link, you don’t have to choose a different room right away. <a href="mailto:Linda@blissfulhoneymoons.com?subject=Devin and Rina Wedding – Room Request&body=Hi Linda,%0D%0A%0D%0AI'm a guest at Devin and Rina's wedding, but it looks like my preferred room type is not available. Hoping you might be able to help! Here are my details:%0D%0A%0D%0A- Name(s): [Your Full Name(s)]%0D%0A- Preferred Room Type: [Junior Suite, Junior Suite Ocean View, INSPIRA Swim Out, INSPIRA Terrace]%0D%0A-Number of beds: [One or Two]%0D%0A- Desired Check-in Date: [e.g., July 12, 2026]%0D%0A- Desired Check-out Date: [e.g., July 21, 2026]%0D%0A%0D%0APlease let me know if extending my stay is possible and what the next steps are.%0D%0A%0D%0AThanks so much!">Click here to email Linda with your preferred room type, and she’ll do her best to assist you.</a></p>
+  <div class="accordion-item">
+    <button class="accordion-question">The room I want to reserve is unavailable on the booking link. Do I have to choose a different room instead?</button>
+    <div class="accordion-answer">
+      <p>We did our best to reserve rooms based on everyone’s preferences from the form, but rooms are first-come, first-served once deposits start coming in.</p>
+      <p>If your preferred room type isn't available through the booking link, you don’t have to choose a different room right away. <a href="mailto:Linda@blissfulhoneymoons.com?subject=Devin and Rina Wedding – Room Request&body=Hi Linda,%0D%0A%0D%0AI'm a guest at Devin and Rina's wedding, but it looks like my preferred room type is not available. Hoping you might be able to help! Here are my details:%0D%0A%0D%0A- Name(s): [Your Full Name(s)]%0D%0A- Preferred Room Type: [Junior Suite, Junior Suite Ocean View, INSPIRA Swim Out, INSPIRA Terrace]%0D%0A-Number of beds: [One or Two]%0D%0A- Desired Check-in Date: [e.g., July 12, 2026]%0D%0A- Desired Check-out Date: [e.g., July 21, 2026]%0D%0A%0D%0APlease let me know if extending my stay is possible and what the next steps are.%0D%0A%0D%0AThanks so much!">Click here to email Linda with your preferred room type, and she’ll do her best to assist you.</a></p>
+    </div>
   </div>
 </div>
 
-
-  </div>
-
-  <script>
-    // Room pricing data
-    const prices = {
-      juniorSuite: {
-        single: 265,
-        double: 265,
-        triple: 309,
-      },
-      juniorSuiteOceanView: {
-        single: 305,
-        double: 305,
-        triple: 345,
-      },
-      inspiraSwimOut: {
-        single: 330,
-        double: 330,
-        triple: 370,
-      },
-      inspiraTerrace: {
-        single: 330,
-        double: 330,
-        triple: 370,
-      },
+<script>
+  const prices = {
+      juniorSuite: { single: 265, double: 265, triple: 309 },
+      juniorSuiteOceanView: { single: 305, double: 305, triple: 345 },
+      inspiraSwimOut: { single: 330, double: 330, triple: 370 },
+      inspiraTerrace: { single: 330, double: 330, triple: 370 }
     };
 
-    const roomTypeSelect = document.getElementById('roomType');
-    const occupancySelect = document.getElementById('occupancy');
-    const nightsSelect = document.getElementById('nights');
-    const calculateBtn = document.getElementById('calculateBtn');
-    const resultDiv = document.getElementById('result');
-
-    calculateBtn.addEventListener('click', () => {
-      const roomType = roomTypeSelect.value;
-      const occupancy = occupancySelect.value;
-      const nights = nightsSelect.value;
+    document.getElementById('calculateBtn').addEventListener('click', () => {
+      const roomType = document.getElementById('roomType').value;
+      const occupancy = document.getElementById('occupancy').value;
+      const nights = parseInt(document.getElementById('nights').value);
+      const resultDiv = document.getElementById('result');
 
       if (!roomType || !occupancy || !nights) {
         resultDiv.textContent = 'Please select all options.';
@@ -324,17 +326,11 @@ That said, the Junior Suites are still incredibly comfortable and beautiful. You
       }
 
       const rate = prices[roomType][occupancy];
-      if (!rate) {
-        resultDiv.textContent = 'Invalid room or occupancy selection.';
-        return;
-      }
-
       const totalCost = rate * nights;
       resultDiv.textContent = `Total cost for your stay: $${totalCost.toFixed(2)}`;
       document.getElementById('calendarSection').style.display = 'block';
     });
 
-    // Calendar event data
     const events = {
       secondPayment: {
         title: "D&R Wedding 2nd Room Payment Due",
@@ -360,67 +356,37 @@ That said, the Junior Suites are still incredibly comfortable and beautiful. You
     };
 
     function formatDateToICS(dateStr) {
-      const dt = new Date(dateStr);
-      return dt.toISOString().replace(/[-:]|\.\d{3}/g, '');
-    }
-
-    function createICS(event) {
-      return `BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-SUMMARY:${event.title}
-DESCRIPTION:${event.description}
-LOCATION:${event.location}
-DTSTART:${formatDateToICS(event.startDate)}
-DTEND:${formatDateToICS(event.endDate)}
-END:VEVENT
-END:VCALENDAR`;
+      return new Date(dateStr).toISOString().replace(/[-:]|\.\d{3}/g, '');
     }
 
     document.getElementById('addIcsBtn').addEventListener('click', () => {
-      const reminderType = document.getElementById('reminderType').value;
-      if (!reminderType) return alert('Select a reminder type');
-
-      const event = events[reminderType];
-      const icsContent = createICS(event);
-      const blob = new Blob([icsContent], { type: 'text/calendar' });
+      const type = document.getElementById('reminderType').value;
+      if (!type) return alert('Select a reminder type');
+      const e = events[type];
+      const content = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${e.title}\nDESCRIPTION:${e.description}\nLOCATION:${e.location}\nDTSTART:${formatDateToICS(e.startDate)}\nDTEND:${formatDateToICS(e.endDate)}\nEND:VEVENT\nEND:VCALENDAR`;
+      const blob = new Blob([content], { type: 'text/calendar' });
       const url = URL.createObjectURL(blob);
-
       const a = document.createElement('a');
-      a.href = url;
-      a.download = 'event.ics';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      a.href = url; a.download = 'event.ics';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
     });
 
     document.getElementById('addGoogleBtn').addEventListener('click', () => {
-      const reminderType = document.getElementById('reminderType').value;
-      if (!reminderType) return alert('Select a reminder type');
-
-      const event = events[reminderType];
-      const start = encodeURIComponent(event.startDate.replace(/-|:|\.\d+/g, ''));
-      const end = encodeURIComponent(event.endDate.replace(/-|:|\.\d+/g, ''));
-      const title = encodeURIComponent(event.title);
-      const details = encodeURIComponent(event.description);
-      const location = encodeURIComponent(event.location);
-
-      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${start}/${end}`;
-
+      const type = document.getElementById('reminderType').value;
+      if (!type) return alert('Select a reminder type');
+      const e = events[type];
+      const start = formatDateToICS(e.startDate);
+      const end = formatDateToICS(e.endDate);
+      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(e.title)}&details=${encodeURIComponent(e.description)}&location=${encodeURIComponent(e.location)}&dates=${start}/${end}`;
       window.open(url, '_blank');
     });
 
-    // FAQ Accordion functionality
-    document.querySelectorAll('.accordion').forEach(acc => {
-      acc.addEventListener('click', () => {
-        acc.classList.toggle('active');
-        const panel = acc.nextElementSibling;
-        if (panel.style.maxHeight) {
-          panel.style.maxHeight = null;
-        } else {
-          panel.style.maxHeight = panel.scrollHeight + 'px';
-        }
+    // Chevron accordion interaction
+    document.querySelectorAll('.accordion-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+        const answer = btn.nextElementSibling;
+        answer.classList.toggle('open');
       });
     });
   </script>
