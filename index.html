@@ -377,8 +377,8 @@ const totalCost = prices[roomType][occupancy][nights];
 
 // Calculate remaining balance and split it evenly
 const remaining = totalCost - deposit;
-const secondPayment = (remaining / 2).toFixed(2);
-const finalPayment = (remaining / 2).toFixed(2);
+const secondPayment = ((totalCost / 2) - deposit).toFixed(2);
+const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
 
   resultDiv.innerHTML = `
     <p><strong>Total cost for your stay:</strong> $${totalCost.toFixed(2)}</p>
