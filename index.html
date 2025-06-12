@@ -678,10 +678,24 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
           </div>`);
       });
       document.getElementById('comparisonTableBody').innerHTML = tableRows.join("");
-      document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
-      document.getElementById('comparisonContainer').style.display = 'block';
-    }
-    
+document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
+document.getElementById('comparisonContainer').style.display = 'block';
+
+// Recalculate and expand the accordion if open
+const savingsAccordion = document.querySelector('.savings-toggle').closest('.accordion-item');
+const answer = savingsAccordion.querySelector('.accordion-answer');
+
+if (savingsAccordion.classList.contains('active')) {
+  answer.style.maxHeight = 'none';
+  const fullHeight = answer.scrollHeight + 'px';
+  answer.style.maxHeight = '0';
+  requestAnimationFrame(() => {
+    answer.style.maxHeight = fullHeight;
+  });
+} // closes the if block
+
+} // ✅ closes the showComparisonTable function
+
 // Savings Planner toggle interaction
 document.querySelectorAll('.savings-toggle').forEach(button => {
   button.addEventListener('click', () => {
