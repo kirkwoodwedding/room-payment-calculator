@@ -682,7 +682,9 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
       document.getElementById('comparisonContainer').style.display = 'block';
     }
     // Savings Planner toggle interaction
-  document.querySelectorAll('.savings-toggle').forEach(button => {
+  // Savings Planner toggle interaction
+// Savings Planner toggle interaction
+document.querySelectorAll('.savings-toggle').forEach(button => {
   button.addEventListener('click', () => {
     const item = button.closest('.accordion-item');
     const answer = item.querySelector('.accordion-answer');
@@ -696,12 +698,18 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
       });
       item.classList.remove('active');
     } else {
-      // Expand with animation
-      answer.style.maxHeight = answer.scrollHeight + 'px';
+      // Fix: Ensure accurate height before expanding
+      answer.style.maxHeight = 'none'; // temporarily allow full height
+      const fullHeight = answer.scrollHeight + 'px'; // force measurement
+      answer.style.maxHeight = '0'; // reset to 0 first
+      requestAnimationFrame(() => {
+        answer.style.maxHeight = fullHeight; // animate to correct height
+      });
       item.classList.add('active');
     }
   });
 });
+
 
     // FAQ Accordian
     document.querySelectorAll('.accordion-question').forEach(button => {
