@@ -636,74 +636,74 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
       }
     }
 
-    function showComparisonTable() {
-      let total = parseFloat(document.getElementById('totalCostInput').value.replace(/[^\d.]/g, ''));
-      const interval = document.getElementById('intervalType').value;
-      const now = new Date();
-      const customStartDate = now;
-      if (!total || isNaN(total)) {
-        document.getElementById('budgetResult').textContent = 'Please enter a valid total cost.';
-        return;
-      }
-      const intervalLabel = interval === 'weekly' ? 'per week' : interval === 'biweekly' ? 'every other week' : 'per month';
-      const plans = [
-        { label: "Full Trip", amount: total, from: customStartDate, to: new Date("2026-03-10") },
-        { label: "Full Trip (Deposit Paid)", amount: total - 400, from: customStartDate, to: new Date("2026-03-10") },
-        { label: "Deposit & 2nd Payment", amount: total / 2, from: customStartDate, to: new Date("2025-12-11") },
-        { label: "Second Payment Only (Deposit Paid)", amount: (total / 2) - 400, from: customStartDate, to: new Date("2025-12-11") },
-        { label: "Final Payment Only", amount: total / 2, from: new Date("2025-12-12"), to: new Date("2026-03-10") }
-      ];
-      const tableRows = [], cardBlocks = [];
-      plans.forEach(plan => {
-        const daysLeft = Math.ceil((plan.to - plan.from) / (1000 * 60 * 60 * 24));
-        let intervals = interval === 'monthly' ? daysLeft / 30 : interval === 'biweekly' ? daysLeft / 14 : daysLeft / 7;
-        const perInterval = plan.amount / intervals;
-        const timeframe = `${plan.from.toLocaleDateString()} – ${plan.to.toLocaleDateString()}`;
-        const weeks = Math.floor(daysLeft / 7);
-        const months = Math.floor(daysLeft / 30);
-        const duration = `${weeks} weeks (${months} months)`;
-        const summaryLine = `Save $${perInterval.toFixed(2)} ${intervalLabel} for the ${plan.label.toLowerCase()}.`;
-        tableRows.push(`<tr><td>${plan.label}</td><td>${timeframe}</td><td>$${plan.amount.toFixed(2)}</td><td>$${perInterval.toFixed(2)}</td><td>${duration}</td></tr>`);
-        cardBlocks.push(`
-          <div class="plan-card">
-            <p class="plan-header" onclick="this.parentElement.classList.toggle('active')">
-              ${plan.label} <span>▾</span>
-            </p>
-            <div class="plan-summary">${summaryLine}</div>
-            <div class="plan-content">
-              <p><strong>Timeframe:</strong> ${timeframe}</p>
-              <p><strong>Amount Due:</strong> $${plan.amount.toFixed(2)}</p>
-              <p><strong>Duration:</strong> ${duration}</p>
-              <p><strong>Save Per Interval:</strong> $${perInterval.toFixed(2)}</p>
-              <button onclick="downloadRecurringReminder('${plan.label} Payment Reminder', 'Save $${perInterval.toFixed(2)} ${intervalLabel}', '${plan.from.toISOString()}', '${interval}')">Add Recurring Reminder</button>
-            </div>
-          </div>`);
-      });
-      document.getElementById('comparisonTableBody').innerHTML = tableRows.join("");
-document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
-document.getElementById('comparisonContainer').style.display = 'block';
-
-// Recalculate and expand the accordion if open
-const savingsAccordion = document.querySelector('.savings-toggle').closest('.accordion-item');
-const answer = savingsAccordion.querySelector('.accordion-answer');
-
-if (savingsAccordion.classList.contains('active')) {
-  answer.style.transition = 'none'; // disable transition temporarily
-  answer.style.maxHeight = 'none';  // measure naturally
-  const fullHeight = answer.scrollHeight + 'px';
+      function showComparisonTable() {
+        let total = parseFloat(document.getElementById('totalCostInput').value.replace(/[^\d.]/g, ''));
+        const interval = document.getElementById('intervalType').value;
+        const now = new Date();
+        const customStartDate = now;
+        if (!total || isNaN(total)) {
+          document.getElementById('budgetResult').textContent = 'Please enter a valid total cost.';
+          return;
+        }
+        const intervalLabel = interval === 'weekly' ? 'per week' : interval === 'biweekly' ? 'every other week' : 'per month';
+        const plans = [
+          { label: "Full Trip", amount: total, from: customStartDate, to: new Date("2026-03-10") },
+          { label: "Full Trip (Deposit Paid)", amount: total - 400, from: customStartDate, to: new Date("2026-03-10") },
+          { label: "Deposit & 2nd Payment", amount: total / 2, from: customStartDate, to: new Date("2025-12-11") },
+          { label: "Second Payment Only (Deposit Paid)", amount: (total / 2) - 400, from: customStartDate, to: new Date("2025-12-11") },
+          { label: "Final Payment Only", amount: total / 2, from: new Date("2025-12-12"), to: new Date("2026-03-10") }
+        ];
+        const tableRows = [], cardBlocks = [];
+        plans.forEach(plan => {
+          const daysLeft = Math.ceil((plan.to - plan.from) / (1000 * 60 * 60 * 24));
+          let intervals = interval === 'monthly' ? daysLeft / 30 : interval === 'biweekly' ? daysLeft / 14 : daysLeft / 7;
+          const perInterval = plan.amount / intervals;
+          const timeframe = `${plan.from.toLocaleDateString()} – ${plan.to.toLocaleDateString()}`;
+          const weeks = Math.floor(daysLeft / 7);
+          const months = Math.floor(daysLeft / 30);
+          const duration = `${weeks} weeks (${months} months)`;
+          const summaryLine = `Save $${perInterval.toFixed(2)} ${intervalLabel} for the ${plan.label.toLowerCase()}.`;
+          tableRows.push(`<tr><td>${plan.label}</td><td>${timeframe}</td><td>$${plan.amount.toFixed(2)}</td><td>$${perInterval.toFixed(2)}</td><td>${duration}</td></tr>`);
+          cardBlocks.push(`
+            <div class="plan-card">
+              <p class="plan-header" onclick="this.parentElement.classList.toggle('active')">
+                ${plan.label} <span>▾</span>
+              </p>
+              <div class="plan-summary">${summaryLine}</div>
+              <div class="plan-content">
+                <p><strong>Timeframe:</strong> ${timeframe}</p>
+                <p><strong>Amount Due:</strong> $${plan.amount.toFixed(2)}</p>
+                <p><strong>Duration:</strong> ${duration}</p>
+                <p><strong>Save Per Interval:</strong> $${perInterval.toFixed(2)}</p>
+                <button onclick="downloadRecurringReminder('${plan.label} Payment Reminder', 'Save $${perInterval.toFixed(2)} ${intervalLabel}', '${plan.from.toISOString()}', '${interval}')">Add Recurring Reminder</button>
+              </div>
+            </div>`);
+        });
+        document.getElementById('comparisonTableBody').innerHTML = tableRows.join("");
+  document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
+  document.getElementById('comparisonContainer').style.display = 'block';
   
-  // Reset to zero with transition off
-  answer.style.maxHeight = '0';
-
-  // Force reflow
-  void answer.offsetHeight;
-
-  // Re-enable transition and animate to full height
-  answer.style.transition = 'max-height 0.3s ease';
-  requestAnimationFrame(() => {
-    answer.style.maxHeight = fullHeight;
-  });
-} // closes the if block
+  // Recalculate and expand the accordion if open
+  const savingsAccordion = document.querySelector('.savings-toggle').closest('.accordion-item');
+  const answer = savingsAccordion.querySelector('.accordion-answer');
+  
+  if (savingsAccordion.classList.contains('active')) {
+    answer.style.transition = 'none'; // disable transition temporarily
+    answer.style.maxHeight = 'none';  // measure naturally
+    const fullHeight = answer.scrollHeight + 'px';
+    
+    // Reset to zero with transition off
+    answer.style.maxHeight = '0';
+  
+    // Force reflow
+    void answer.offsetHeight;
+  
+    // Re-enable transition and animate to full height
+    answer.style.transition = 'max-height 0.3s ease';
+    requestAnimationFrame(() => {
+      answer.style.maxHeight = fullHeight;
+    });
+  } // closes the if block
 
 } // ✅ closes the showComparisonTable function
 
