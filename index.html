@@ -689,6 +689,14 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
       document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
       document.getElementById('comparisonContainer').style.display = 'block';
     }
+    // Savings Planner toggle interaction
+document.querySelectorAll('.savings-toggle').forEach(button => {
+  button.addEventListener('click', () => {
+    const item = button.closest('.accordion-item');
+    item.classList.toggle('active');
+  });
+});
+
   </script>
 </body>
 </html>
