@@ -203,7 +203,7 @@
     }
 
     .accordion-answer {
-      padding: 0 20px;
+      padding: 0; /* <-- changed from 0 20px */
       background-color: rgba(162, 178, 159, 0.3);
       max-height: 0;
       overflow: hidden;
@@ -211,6 +211,13 @@
       border-radius: 5px;
       font-size: 0.95rem;
       color: var(--text-dark);
+    }
+    
+    .savings-wrapper {
+      padding: 20px;
+      background-color: #CFDBCD; /* consistent with the others */
+      border-radius: 0 0 8px 8px;
+      box-sizing: border-box;
     }
 
     .accordion-question::after {
@@ -357,7 +364,7 @@
     <div class="accordion-item">
       <button class="savings-toggle">Savings Planner</button>
       <div class="accordion-answer">
-        <div class="wrapper">
+        <div class="savings-wrapper">
           <label for="totalCostInput">Total Cost of Your Trip:</label>
           <input type="text" id="totalCostInput" placeholder="$">
           <label for="intervalType">Save By:</label>
