@@ -496,11 +496,7 @@
         triple: { 3: 4770.15, 4: 6318.21, 5: 7866.27 }
       }
     };
-
-     document.getElementById('comparisonTableBody').innerHTML = tableRows.join("");
-document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
-document.getElementById('comparisonContainer').style.display = 'block';
-
+window.addEventListener('load', () => {
 const savingsAccordion = document.querySelector('.savings-toggle').closest('.accordion-item');
 const answer = savingsAccordion.querySelector('.accordion-answer');
 
