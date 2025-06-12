@@ -203,6 +203,16 @@
     .accordion-item.active .accordion-question::after {
       transform: rotate(-180deg);
     }
+    /* Show mobile version of savings planner on small screens */
+@media (max-width: 600px) {
+  .collapsible-table {
+    display: block !important;
+  }
+
+  table {
+    display: none !important;
+  }
+}
   </style>
 </head>
   
