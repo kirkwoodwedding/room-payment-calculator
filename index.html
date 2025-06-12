@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Room Payment Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Yeseva+One&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&family=Yeseva+One&display=swap" rel="stylesheet" />
   <style>
     :root {
       --sage: #a2b29f;
@@ -263,7 +263,7 @@
   <div class="accordion-item">
     <button class="accordion-question">When do I need to make the payments?</button>
     <div class="accordion-answer">
-      <p><strong>Deposit ($400):</strong> Due as soon as you're ready to book<br>
+      <p><strong>1st Payment (deposit):</strong> Due December 10, 2025<br>
       <strong>2nd Payment:</strong> Due December 11, 2025<br>
       <strong>Final Payment:</strong> Due March 10, 2026</p>
     </div>
@@ -385,7 +385,7 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
   `;
 
   breakdownDiv.innerHTML = `
-    <p><strong>Deposit:</strong> $${deposit}</p>
+    <p><strong>1st Payment (deposit due Dec 10, 2025):</strong> $${deposit}</p>
     <p><strong>2nd Payment (due Dec 11, 2025):</strong> $${secondPayment}</p>
     <p><strong>Final Payment (due Mar 10, 2026):</strong> $${finalPayment}</p>
   `;
