@@ -675,12 +675,27 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
       document.getElementById('comparisonContainer').style.display = 'block';
     }
     // Savings Planner toggle interaction
-document.querySelectorAll('.savings-toggle').forEach(button => {
-  button.addEventListener('click', () => {
-    const item = button.closest('.accordion-item');
-    item.classList.toggle('active');
+  document.querySelectorAll('.savings-toggle').forEach(button => {
+    button.addEventListener('click', () => {
+      const item = button.closest('.accordion-item');
+      const answer = item.querySelector('.accordion-answer');
+      const isOpen = item.classList.contains('active');
+  
+      if (isOpen) {
+        // Collapse
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        requestAnimationFrame(() => {
+          answer.style.maxHeight = '0';
+        });
+        item.classList.remove('active');
+      } else {
+        // Expand
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        item.classList.add('active');
+      }
+    });
   });
-});
+    // FAQ Accordian
     document.querySelectorAll('.accordion-question').forEach(button => {
   button.addEventListener('click', () => {
     const item = button.parentElement;
