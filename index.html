@@ -213,11 +213,6 @@
       color: var(--text-dark);
     }
 
-    .accordion-item.active .accordion-answer {
-      max-height: 9999px; /* or remove max-height entirely */
-      overflow: visible;
-    }
-
     .accordion-question::after {
       content: '▾';
       float: right;
@@ -695,6 +690,27 @@ document.querySelectorAll('.savings-toggle').forEach(button => {
     item.classList.toggle('active');
   });
 });
+    document.querySelectorAll('.accordion-question').forEach(button => {
+  button.addEventListener('click', () => {
+    const item = button.parentElement;
+    const answer = item.querySelector('.accordion-answer');
+    const isOpen = item.classList.contains('active');
+
+    if (isOpen) {
+      // Collapse
+      answer.style.maxHeight = answer.scrollHeight + 'px'; // Set to current height to trigger transition
+      requestAnimationFrame(() => {
+        answer.style.maxHeight = '0';
+      });
+      item.classList.remove('active');
+    } else {
+      // Expand
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      item.classList.add('active');
+    }
+  });
+});
+
 
   </script>
 </body>
