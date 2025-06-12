@@ -586,15 +586,6 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
       window.open(url, '_blank');
     });
 
-
-    // Chevron accordion interaction
-    document.querySelectorAll('.accordion-question').forEach(button => {
-      button.addEventListener('click', () => {
-        const item = button.parentElement;
-        item.classList.toggle('active');
-      });
-    });
-
     //Savings Planner
     const costInput = document.getElementById('totalCostInput');
     costInput.addEventListener('blur', function (e) {
