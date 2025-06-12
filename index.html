@@ -155,6 +155,29 @@
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
+    
+    /* Savings Planner Button */ 
+    .savings-toggle {
+      background-color: white;
+      color: #455841;
+      border: 2px solid #455841;
+      border-radius: 6px;
+      padding: 14px 20px;
+      width: 100%;
+      text-align: left;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    .savings-toggle:hover,
+    .savings-toggle.active {
+      background-color: #455841;
+      color: white;
+    }
 
     /* Q&A Accordion styles */
     .accordion-question {
@@ -191,7 +214,8 @@
     }
 
     .accordion-item.active .accordion-answer {
-      max-height: 1000px;
+      max-height: 9999px; /* or remove max-height entirely */
+      overflow: visible;
     }
 
     .accordion-question::after {
@@ -336,7 +360,7 @@
 
 <!-- Expandable Savings Planner -->
     <div class="accordion-item">
-      <button class="accordion-question">Savings Planner</button>
+      <button class="savings-toggle">Savings Planner</button>
       <div class="accordion-answer">
         <div class="wrapper">
           <h3>Budget Your Payments</h3>
