@@ -682,22 +682,17 @@ document.getElementById('calculateBtn').addEventListener('click', function () {
   const answer = savingsAccordion.querySelector('.accordion-answer');
   
   if (savingsAccordion.classList.contains('active')) {
-    answer.style.transition = 'none'; // disable transition temporarily
-    answer.style.maxHeight = 'none';  // measure naturally
-    const fullHeight = answer.scrollHeight + 'px';
-    
-    // Reset to zero with transition off
-    answer.style.maxHeight = '0';
+  const currentHeight = answer.scrollHeight;
   
-    // Force reflow
-    void answer.offsetHeight;
-  
-    // Re-enable transition and animate to full height
-    answer.style.transition = 'max-height 0.3s ease';
-    requestAnimationFrame(() => {
-      answer.style.maxHeight = fullHeight;
-    });
-  } // closes the if block
+  // Temporarily remove max-height to allow content height to update
+  answer.style.maxHeight = 'none';
+  void answer.offsetHeight; // force reflow
+
+  // Then animate to the new height
+  answer.style.transition = 'max-height 0.4s ease';
+  answer.style.maxHeight = currentHeight + 'px';
+}
+ // closes the if block
 
 } // ✅ closes the showComparisonTable function
 
