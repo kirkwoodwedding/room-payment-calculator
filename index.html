@@ -496,35 +496,32 @@
         triple: { 3: 4770.15, 4: 6318.21, 5: 7866.27 }
       }
     };
-window.addEventListener('load', () => {
-const savingsAccordion = document.querySelector('.savings-toggle').closest('.accordion-item');
-const answer = savingsAccordion.querySelector('.accordion-answer');
 
-if (savingsAccordion.classList.contains('active')) {
-  // Smoothly re-expand based on new content height
-  answer.style.transition = 'none';            // Turn off transition
-  answer.style.maxHeight = answer.scrollHeight + 'px'; // Measure current height
-  void answer.offsetHeight;                    // Force reflow
+document.getElementById('calculateBtn').addEventListener('click', function () {
+  const roomType = document.getElementById('roomType').value;
+  const occupancy = document.getElementById('occupancy').value;
+  const nights = document.getElementById('nights').value;
 
-  answer.style.transition = 'max-height 0.3s ease'; // Turn transition back on
-  answer.style.maxHeight = answer.scrollHeight + 'px'; // Re-set to full height
-}
+  if (!roomType || !occupancy || !nights) {
+    alert("Please select all options before calculating.");
+    return;
+  }
 
-const deposit = 400;
+  const totalCost = prices[roomType][occupancy][nights];
+  const deposit = 400;
 
-// Look up the total cost directly from your full price table
-const totalCost = prices[roomType][occupancy][nights];
+  const resultDiv = document.getElementById('result');
+  const breakdownDiv = document.getElementById('paymentBreakdown');
+  const calendarSection = document.getElementById('calendarSection');
 
-document.getElementById('totalCostInput').value = totalCost.toLocaleString("en-US", {
-  style: "currency",
-  currency: "USD",
-  minimumFractionDigits: 2
-});
+  document.getElementById('totalCostInput').value = totalCost.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2
+  });
 
-// Calculate remaining balance and split it evenly
-const remaining = totalCost - deposit;
-const secondPayment = ((totalCost / 2) - deposit).toFixed(2);
-const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
+  const secondPayment = ((totalCost / 2) - deposit).toFixed(2);
+  const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
 
   resultDiv.innerHTML = `
     <p><strong>Total cost for your stay:</strong> $${totalCost.toFixed(2)}</p>
@@ -537,8 +534,9 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
   `;
 
   breakdownDiv.style.display = 'block';
-  calendarSection.style.display = 'block'; // ✅ Only show calendar if inputs are valid
+  calendarSection.style.display = 'block';
 });
+
 
     
     const events = {
