@@ -336,7 +336,7 @@
 
 <!-- Expandable Savings Planner -->
     <div class="accordion-item">
-      <button class="accordion-question">💰 Want help budgeting your payments?</button>
+      <button class="accordion-question">Savings Planner</button>
       <div class="accordion-answer">
         <div class="wrapper">
           <h3>Budget Your Payments</h3>
@@ -491,6 +491,12 @@ const deposit = 400;
 
 // Look up the total cost directly from your full price table
 const totalCost = prices[roomType][occupancy][nights];
+
+document.getElementById('totalCostInput').value = totalCost.toLocaleString("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2
+});
 
 // Calculate remaining balance and split it evenly
 const remaining = totalCost - deposit;
