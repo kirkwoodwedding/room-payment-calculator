@@ -254,6 +254,42 @@
       <button id="addGoogleBtn">Add to Google Calendar</button>
     </div>
 
+<!-- Expandable Savings Planner -->
+    <div class="accordion-item">
+      <button class="accordion-question">💰 Want help budgeting your payments?</button>
+      <div class="accordion-answer">
+        <div class="wrapper">
+          <h3>Budget Your Payments</h3>
+          <label for="totalCostInput">Total Cost of Your Trip:</label>
+          <input type="text" id="totalCostInput" placeholder="$">
+          <label for="intervalType">Save By:</label>
+          <select id="intervalType">
+            <option value="monthly">Monthly</option>
+            <option value="biweekly">Every 2 Weeks</option>
+            <option value="weekly">Weekly</option>
+          </select>
+          <button onclick="showComparisonTable()">Compare All Savings Plans</button>
+          <div id="budgetResult"></div>
+          <div class="comparison-container" id="comparisonContainer" style="display:none;">
+            <h3>Plan Comparison</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Plan</th>
+                  <th>Timeframe</th>
+                  <th>Amount Due</th>
+                  <th>Save Per Interval</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody id="comparisonTableBody"></tbody>
+            </table>
+            <div class="collapsible-table" id="mobileCards"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="booking-section">
       <h2>Booking and Payment Information</h2>
       <p>A $400 deposit secures your spot and counts toward your total stay. We’ve got a block of rooms held just for our guests, but availability is limited! Reserve your spot early, avoid the last-minute scramble, and get ready for some serious R&R (plus a little wedding magic with ✨ D&R ✨).</p>
@@ -454,6 +490,95 @@ const finalPayment = (totalCost - deposit - secondPayment).toFixed(2);
         item.classList.toggle('active');
       });
     });
+
+    //Savings Planner
+    const costInput = document.getElementById('totalCostInput');
+    costInput.addEventListener('blur', function (e) {
+      const raw = e.target.value.replace(/[^\d.]/g, '');
+      const value = raw ? parseFloat(raw) : '';
+      if (value !== '') {
+        e.target.value = value.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 2
+        });
+      } else {
+        e.target.value = '';
+      }
+    });
+
+    function downloadRecurringReminder(title, description, startDate, interval) {
+      const start = new Date(startDate);
+      const startISO = start.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      let freq;
+      if (interval === 'weekly') freq = 'WEEKLY';
+      else if (interval === 'biweekly') freq = 'WEEKLY;INTERVAL=2';
+      else freq = 'MONTHLY';
+
+      const icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${title}\nDESCRIPTION:${description}\nDTSTART:${startISO}\nRRULE:FREQ=${freq};UNTIL=20260310T000000Z\nEND:VEVENT\nEND:VCALENDAR`;
+      const blob = new Blob([icsContent], { type: 'text/calendar' });
+      const url = URL.createObjectURL(blob);
+
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = url;
+      } else {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${title.replace(/\s+/g, '_')}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
+    function showComparisonTable() {
+      let total = parseFloat(document.getElementById('totalCostInput').value.replace(/[^\d.]/g, ''));
+      const interval = document.getElementById('intervalType').value;
+      const now = new Date();
+      const customStartDate = now;
+      if (!total || isNaN(total)) {
+        document.getElementById('budgetResult').textContent = 'Please enter a valid total cost.';
+        return;
+      }
+      const intervalLabel = interval === 'weekly' ? 'per week' : interval === 'biweekly' ? 'every other week' : 'per month';
+      const plans = [
+        { label: "Full Trip", amount: total, from: customStartDate, to: new Date("2026-03-10") },
+        { label: "Full Trip (Deposit Paid)", amount: total - 400, from: customStartDate, to: new Date("2026-03-10") },
+        { label: "Deposit & 2nd Payment", amount: total / 2, from: customStartDate, to: new Date("2025-12-11") },
+        { label: "Second Payment Only (Deposit Paid)", amount: (total / 2) - 400, from: customStartDate, to: new Date("2025-12-11") },
+        { label: "Final Payment Only", amount: total / 2, from: new Date("2025-12-12"), to: new Date("2026-03-10") }
+      ];
+      const tableRows = [], cardBlocks = [];
+      plans.forEach(plan => {
+        const daysLeft = Math.ceil((plan.to - plan.from) / (1000 * 60 * 60 * 24));
+        let intervals = interval === 'monthly' ? daysLeft / 30 : interval === 'biweekly' ? daysLeft / 14 : daysLeft / 7;
+        const perInterval = plan.amount / intervals;
+        const timeframe = `${plan.from.toLocaleDateString()} – ${plan.to.toLocaleDateString()}`;
+        const weeks = Math.floor(daysLeft / 7);
+        const months = Math.floor(daysLeft / 30);
+        const duration = `${weeks} weeks (${months} months)`;
+        const summaryLine = `Save $${perInterval.toFixed(2)} ${intervalLabel} for the ${plan.label.toLowerCase()}.`;
+        tableRows.push(`<tr><td>${plan.label}</td><td>${timeframe}</td><td>$${plan.amount.toFixed(2)}</td><td>$${perInterval.toFixed(2)}</td><td>${duration}</td></tr>`);
+        cardBlocks.push(`
+          <div class="plan-card">
+            <p class="plan-header" onclick="this.parentElement.classList.toggle('active')">
+              ${plan.label} <span>▾</span>
+            </p>
+            <div class="plan-summary">${summaryLine}</div>
+            <div class="plan-content">
+              <p><strong>Timeframe:</strong> ${timeframe}</p>
+              <p><strong>Amount Due:</strong> $${plan.amount.toFixed(2)}</p>
+              <p><strong>Duration:</strong> ${duration}</p>
+              <p><strong>Save Per Interval:</strong> $${perInterval.toFixed(2)}</p>
+              <button onclick="downloadRecurringReminder('${plan.label} Payment Reminder', 'Save $${perInterval.toFixed(2)} ${intervalLabel}', '${plan.from.toISOString()}', '${interval}')">Add Recurring Reminder</button>
+            </div>
+          </div>`);
+      });
+      document.getElementById('comparisonTableBody').innerHTML = tableRows.join("");
+      document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
+      document.getElementById('comparisonContainer').style.display = 'block';
+    }
   </script>
 </body>
 </html>
