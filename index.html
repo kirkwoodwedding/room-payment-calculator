@@ -497,19 +497,21 @@
       }
     };
 
-     document.getElementById('calculateBtn').addEventListener('click', () => {
-  const roomType = document.getElementById('roomType').value;
-  const occupancy = document.getElementById('occupancy').value;
-  const nights = parseInt(document.getElementById('nights').value);
-  const resultDiv = document.getElementById('result');
-  const breakdownDiv = document.getElementById('paymentBreakdown');
-  const calendarSection = document.getElementById('calendarSection');
+     document.getElementById('comparisonTableBody').innerHTML = tableRows.join("");
+document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
+document.getElementById('comparisonContainer').style.display = 'block';
 
-  if (!roomType || !occupancy || !nights) {
-  resultDiv.textContent = 'Please select all options.';
-  breakdownDiv.style.display = 'none';
-  calendarSection.style.display = 'none';
-  return;
+const savingsAccordion = document.querySelector('.savings-toggle').closest('.accordion-item');
+const answer = savingsAccordion.querySelector('.accordion-answer');
+
+if (savingsAccordion.classList.contains('active')) {
+  // Smoothly re-expand based on new content height
+  answer.style.transition = 'none';            // Turn off transition
+  answer.style.maxHeight = answer.scrollHeight + 'px'; // Measure current height
+  void answer.offsetHeight;                    // Force reflow
+
+  answer.style.transition = 'max-height 0.3s ease'; // Turn transition back on
+  answer.style.maxHeight = answer.scrollHeight + 'px'; // Re-set to full height
 }
 
 const deposit = 400;
