@@ -677,6 +677,7 @@ if (costInput) {
 function showComparisonTable() {
   let total = parseFloat(document.getElementById('totalCostInput').value.replace(/[^\d.]/g, ''));
   const interval = document.getElementById('intervalType').value;
+  const isSplit = document.getElementById('splitCostCheckbox').checked;
   const now = new Date();
   const customStartDate = now;
 
@@ -699,7 +700,10 @@ function showComparisonTable() {
   plans.forEach(plan => {
     const daysLeft = Math.ceil((plan.to - plan.from) / (1000 * 60 * 60 * 24));
     let intervals = interval === 'monthly' ? daysLeft / 30 : interval === 'biweekly' ? daysLeft / 14 : daysLeft / 7;
-    const perInterval = plan.amount / intervals;
+    let perInterval = plan.amount / intervals;
+
+    if (isSplit) perInterval /= 2;
+
     const timeframe = `${plan.from.toLocaleDateString()} – ${plan.to.toLocaleDateString()}`;
     const weeks = Math.floor(daysLeft / 7);
     const months = Math.floor(daysLeft / 30);
@@ -727,6 +731,9 @@ function showComparisonTable() {
   document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
   document.getElementById('comparisonContainer').style.display = 'block';
 }
+
+// Trigger recalculation when checkbox changes
+document.getElementById('splitCostCheckbox').addEventListener('change', showComparisonTable);
 
 // Trigger plan comparison refresh
 document.getElementById('intervalType').addEventListener('change', showComparisonTable);
