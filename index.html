@@ -770,24 +770,13 @@ document.getElementById('calculateBtn').addEventListener('click', function () {
   
     // Expand mobile cards
     document.addEventListener('click', function (e) {
-      if (e.target.classList.contains('plan-header')) {
-        const card = e.target.parentElement;
-        card.classList.toggle('active');
-  
-        // Recalculate and animate parent accordion if open
-        const accordionItem = e.target.closest('.accordion-item');
-        const answer = accordionItem.querySelector('.accordion-answer');
-  
-        if (accordionItem.classList.contains('active')) {
-          answer.style.maxHeight = 'none';
-          const newHeight = answer.scrollHeight + 'px';
-          answer.style.maxHeight = '0';
-          void answer.offsetHeight;
-          answer.style.transition = 'max-height 0.3s ease';
-          answer.style.maxHeight = newHeight;
-        }
-      }
-    });
+  const header = e.target.closest('.plan-header');
+  if (!header) return;
+
+  const card = header.parentElement;
+  card.classList.toggle('active');
+});
+
   
     // Accordion toggle behavior for savings planner
     document.querySelectorAll('.savings-toggle').forEach(button => {
