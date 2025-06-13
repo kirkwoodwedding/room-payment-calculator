@@ -243,12 +243,13 @@
       background-color: #b5c0b3;
     }
 
-    .accordion-answer {
+    .accordion-answer > *:last-child {
+      margin-bottom: 8px; /* or padding-bottom if you prefer */
       padding: 0;
       background-color: rgba(162, 178, 159, 0.3);
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.4s ease, padding 0.4s ease;
+      transition: max-height 0.4s ease;
       will-change: max-height, padding;
       border-radius: 5px;
       font-size: 0.95rem;
