@@ -156,35 +156,57 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     
-    /* Savings Planner Button – make it look like a connected header */
-    .savings-toggle {
-      background-color: #CFDBCD;
-      color: #455841;
-      border: 0px solid #455841;
-      border-bottom: none; /* Removes bottom border so it connects visually */
-      border-radius: 8px 8px 0 0; /* Rounded top corners only */
-      padding: 20px 20px;
-      width: 100%;
-      text-align: left;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
-      font-size: 1rem;
-      margin: 0;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    
-    /* When active/open, the button gets a filled background */
-    .savings-toggle:hover,
-      background-color: #CFDBCD;
-      color: $455841;
-    }
+/* Make the entire Savings Planner look like one card */
+.accordion-item.savings {
+  border: 2px solid #455841;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #ffffff;
+  margin-top: 20px;
+}
 
-    .accordion-item.savings .accordion-answer {
-      border: 2px solid #455841;
-      border-top: none; /* Removes top border to visually attach to button */
-      border-radius: 0 0 8px 8px; /* Rounded bottom corners only */
-    }
+/* Button as part of card top */
+.accordion-item.savings .savings-toggle {
+  background-color: transparent;
+  color: #455841;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
+  padding: 20px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  width: 100%;
+  text-align: left;
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Don't change background when clicked */
+.accordion-item.savings .savings-toggle:hover {
+  background-color: #f7f9f6;
+}
+
+/* Inner expanding area – flush into the card */
+.accordion-item.savings .accordion-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding: 0;
+}
+
+/* When open */
+.accordion-item.savings.active .accordion-answer {
+  padding: 0;
+  max-height: 1500px; /* large enough to fit content */
+}
+
+/* Inner wrapper stays padded & styled like the card interior */
+.accordion-item.savings .savings-wrapper {
+  padding: 20px;
+  background-color: #ffffff;
+}
     
     /* Q&A Accordion styles */
     .accordion-question {
