@@ -407,42 +407,44 @@
     </div>
 
 <!-- Savings Planner (hidden by default) -->
-  <div id="savingsPlannerSection" style="display: none;">
-    <div class="accordion-item savings">
-      <button class="savings-toggle">Savings Planner</button>
-      <div class="accordion-answer">
-        <div class="savings-wrapper">
-          <label for="totalCostInput">Total Cost of Your Trip:</label>
-          <input type="text" id="totalCostInput" placeholder="$">
-          <label for="intervalType">Save By:</label>
-          <select id="intervalType">
-            <option value="monthly">Monthly</option>
-            <option value="biweekly">Every 2 Weeks</option>
-            <option value="weekly">Weekly</option>
-          </select>
-          <div id="budgetResult"></div>
-          <div class="comparison-container" id="comparisonContainer" style="display:none;">
-            <h3>Plan Comparison</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Plan</th>
-                  <th>Timeframe</th>
-                  <th>Amount Due</th>
-                  <th>Save Per Interval</th>
-                  <th>Duration</th>
-                </tr>
-              </thead>
-              <tbody id="comparisonTableBody"></tbody>
-            </table>
-            <div class="collapsible-table" id="mobileCards"></div>
-          </div>
+<div id="savingsPlannerSection" style="display: none;">
+  <div class="accordion-item savings">
+    <button class="savings-toggle">Savings Planner</button>
+    <div class="accordion-answer">
+      <div class="savings-wrapper">
+        <label for="totalCostInput">Total Cost of Your Trip:</label>
+        <input type="text" id="totalCostInput" placeholder="$">
+        <label for="intervalType">Save By:</label>
+        <select id="intervalType">
+          <option value="monthly">Monthly</option>
+          <option value="biweekly">Every 2 Weeks</option>
+          <option value="weekly">Weekly</option>
+        </select>
+        <div id="budgetResult"></div>
+        <div class="comparison-container" id="comparisonContainer" style="display:none;">
+          <h3>Plan Comparison</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>Timeframe</th>
+                <th>Amount Due</th>
+                <th>Save Per Interval</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody id="comparisonTableBody"></tbody>
+          </table>
+          <div class="collapsible-table" id="mobileCards"></div>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <div class="booking-section">
-      <h2>Booking and Payment Information</h2>
+<!-- ✅ Always Visible Below -->
+<div class="booking-section">
+  <h2>Booking and Payment Information</h2>
       <p>A $400 deposit secures your spot and counts toward your total stay. We’ve got a block of rooms held just for our guests, but availability is limited! Reserve your spot early, avoid the last-minute scramble, and get ready for some serious R&R (plus a little wedding magic with ✨ D&R ✨).</p>
     </div>
 
