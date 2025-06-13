@@ -272,12 +272,6 @@
       transform: rotate(-180deg);
     }
 
-    .accordion-answer.expanding {
-      transition: max-height 0.4s ease;
-      overflow: hidden;
-    }
-
-
      .plan-card {
     text-align: left;
     background-color: #fff;
@@ -734,16 +728,8 @@ document.getElementById('calculateBtn').addEventListener('click', function () {
       mobileCards.innerHTML = cardBlocks.join("");
       comparisonContainer.style.display = 'block';
   
-      // Expand accordion with recalculated height
-      answer.classList.add('expanding');
-      answer.style.maxHeight = 'none'; // remove limits
-      void answer.offsetHeight;
-      const fullHeight = answer.scrollHeight + 'px';
-      answer.style.maxHeight = '0';
-      requestAnimationFrame(() => {
-        answer.style.maxHeight = fullHeight;
-      });
-    }
+      document.getElementById('savingsPlannerSection').style.display = 'block';
+
   
     // ✅ Auto-update when interval changes or calculate button is clicked
     document.getElementById('intervalType').addEventListener('change', showComparisonTable);
