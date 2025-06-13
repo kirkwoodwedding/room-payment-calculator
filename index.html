@@ -281,11 +281,11 @@
     color: #4a5d50;
   }
   
-  .plan-content {
+ .plan-content {
     display: none;
     padding: 0 20px 15px;
     font-size: 0.95rem;
-    animation: slideDown 0.3s ease forwards;
+    /* REMOVE this: animation: slideDown 0.3s ease forwards; */
   }
   
   .plan-card.active .plan-content {
@@ -294,11 +294,6 @@
   
   .plan-card.active .plan-header span {
     transform: rotate(180deg);
-  }
-  
-  @keyframes slideDown {
-    from { opacity: 0; max-height: 0; }
-    to { opacity: 1; max-height: 1000px; }
   }
   
   .plan-card.active {
