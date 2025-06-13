@@ -248,6 +248,12 @@
       transform: rotate(-180deg);
     }
 
+    .accordion-answer.expanding {
+      transition: max-height 0.4s ease;
+      overflow: hidden;
+    }
+
+
      .plan-card {
     text-align: left;
     background-color: #fff;
@@ -645,70 +651,75 @@ document.getElementById('calculateBtn').addEventListener('click', function () {
     }
 
       function showComparisonTable() {
-        let total = parseFloat(document.getElementById('totalCostInput').value.replace(/[^\d.]/g, ''));
-        const interval = document.getElementById('intervalType').value;
-        const now = new Date();
-        const customStartDate = now;
-        if (!total || isNaN(total)) {
-          document.getElementById('budgetResult').textContent = 'Please enter a valid total cost.';
-          return;
-        }
-        const intervalLabel = interval === 'weekly' ? 'per week' : interval === 'biweekly' ? 'every other week' : 'per month';
-        const plans = [
-          { label: "Full Trip", amount: total, from: customStartDate, to: new Date("2026-03-10") },
-          { label: "Full Trip (Deposit Paid)", amount: total - 400, from: customStartDate, to: new Date("2026-03-10") },
-          { label: "Deposit & 2nd Payment", amount: total / 2, from: customStartDate, to: new Date("2025-12-11") },
-          { label: "Second Payment Only (Deposit Paid)", amount: (total / 2) - 400, from: customStartDate, to: new Date("2025-12-11") },
-          { label: "Final Payment Only", amount: total / 2, from: new Date("2025-12-12"), to: new Date("2026-03-10") }
-        ];
-        const tableRows = [], cardBlocks = [];
-        plans.forEach(plan => {
-          const daysLeft = Math.ceil((plan.to - plan.from) / (1000 * 60 * 60 * 24));
-          let intervals = interval === 'monthly' ? daysLeft / 30 : interval === 'biweekly' ? daysLeft / 14 : daysLeft / 7;
-          const perInterval = plan.amount / intervals;
-          const timeframe = `${plan.from.toLocaleDateString()} – ${plan.to.toLocaleDateString()}`;
-          const weeks = Math.floor(daysLeft / 7);
-          const months = Math.floor(daysLeft / 30);
-          const duration = `${weeks} weeks (${months} months)`;
-          const summaryLine = `Save $${perInterval.toFixed(2)} ${intervalLabel} for the ${plan.label.toLowerCase()}.`;
-          tableRows.push(`<tr><td>${plan.label}</td><td>${timeframe}</td><td>$${plan.amount.toFixed(2)}</td><td>$${perInterval.toFixed(2)}</td><td>${duration}</td></tr>`);
-          cardBlocks.push(`
-            <div class="plan-card">
-              <p class="plan-header" onclick="this.parentElement.classList.toggle('active')">
-                ${plan.label} <span>▾</span>
-              </p>
-              <div class="plan-summary">${summaryLine}</div>
-              <div class="plan-content">
-                <p><strong>Timeframe:</strong> ${timeframe}</p>
-                <p><strong>Amount Due:</strong> $${plan.amount.toFixed(2)}</p>
-                <p><strong>Duration:</strong> ${duration}</p>
-                <p><strong>Save Per Interval:</strong> $${perInterval.toFixed(2)}</p>
-                <button onclick="downloadRecurringReminder('${plan.label} Payment Reminder', 'Save $${perInterval.toFixed(2)} ${intervalLabel}', '${plan.from.toISOString()}', '${interval}')">Add Recurring Reminder</button>
-              </div>
-            </div>`);
-        });
-        document.getElementById('comparisonTableBody').innerHTML = tableRows.join("");
-  document.getElementById('mobileCards').innerHTML = cardBlocks.join("");
-  document.getElementById('comparisonContainer').style.display = 'block';
-  
-  // Recalculate and expand the accordion if open
+  let total = parseFloat(document.getElementById('totalCostInput').value.replace(/[^\d.]/g, ''));
+  const interval = document.getElementById('intervalType').value;
+  const now = new Date();
+  const customStartDate = now;
+
+  if (!total || isNaN(total)) {
+    document.getElementById('budgetResult').textContent = 'Please enter a valid total cost.';
+    return;
+  }
+
+  const intervalLabel = interval === 'weekly' ? 'per week' : interval === 'biweekly' ? 'every other week' : 'per month';
+  const plans = [
+    { label: "Full Trip", amount: total, from: customStartDate, to: new Date("2026-03-10") },
+    { label: "Full Trip (Deposit Paid)", amount: total - 400, from: customStartDate, to: new Date("2026-03-10") },
+    { label: "Deposit & 2nd Payment", amount: total / 2, from: customStartDate, to: new Date("2025-12-11") },
+    { label: "Second Payment Only (Deposit Paid)", amount: (total / 2) - 400, from: customStartDate, to: new Date("2025-12-11") },
+    { label: "Final Payment Only", amount: total / 2, from: new Date("2025-12-12"), to: new Date("2026-03-10") }
+  ];
+
+  const tableRows = [], cardBlocks = [];
+
+  plans.forEach(plan => {
+    const daysLeft = Math.ceil((plan.to - plan.from) / (1000 * 60 * 60 * 24));
+    let intervals = interval === 'monthly' ? daysLeft / 30 : interval === 'biweekly' ? daysLeft / 14 : daysLeft / 7;
+    const perInterval = plan.amount / intervals;
+    const timeframe = `${plan.from.toLocaleDateString()} – ${plan.to.toLocaleDateString()}`;
+    const weeks = Math.floor(daysLeft / 7);
+    const months = Math.floor(daysLeft / 30);
+    const duration = `${weeks} weeks (${months} months)`;
+    const summaryLine = `Save $${perInterval.toFixed(2)} ${intervalLabel} for the ${plan.label.toLowerCase()}.`;
+
+    tableRows.push(`<tr><td>${plan.label}</td><td>${timeframe}</td><td>$${plan.amount.toFixed(2)}</td><td>$${perInterval.toFixed(2)}</td><td>${duration}</td></tr>`);
+
+    cardBlocks.push(`
+      <div class="plan-card">
+        <p class="plan-header">${plan.label} <span>▾</span></p>
+        <div class="plan-summary">${summaryLine}</div>
+        <div class="plan-content">
+          <p><strong>Timeframe:</strong> ${timeframe}</p>
+          <p><strong>Amount Due:</strong> $${plan.amount.toFixed(2)}</p>
+          <p><strong>Duration:</strong> ${duration}</p>
+          <p><strong>Save Per Interval:</strong> $${perInterval.toFixed(2)}</p>
+          <button onclick="downloadRecurringReminder('${plan.label} Payment Reminder', 'Save $${perInterval.toFixed(2)} ${intervalLabel}', '${plan.from.toISOString()}', '${interval}')">Add Recurring Reminder</button>
+        </div>
+      </div>`);
+  });
+
+  const comparisonBody = document.getElementById('comparisonTableBody');
+  const mobileCards = document.getElementById('mobileCards');
+  const comparisonContainer = document.getElementById('comparisonContainer');
   const savingsAccordion = document.querySelector('.savings-toggle').closest('.accordion-item');
   const answer = savingsAccordion.querySelector('.accordion-answer');
-  
-  if (savingsAccordion.classList.contains('active')) {
-  const currentHeight = answer.scrollHeight;
-  
-  // Temporarily remove max-height to allow content height to update
-  answer.style.maxHeight = 'none';
-  void answer.offsetHeight; // force reflow
 
-  // Then animate to the new height
-  answer.style.transition = 'max-height 0.4s ease';
-  answer.style.maxHeight = currentHeight + 'px';
+  // Inject new content
+  comparisonBody.innerHTML = tableRows.join("");
+  mobileCards.innerHTML = cardBlocks.join("");
+  comparisonContainer.style.display = 'block';
+
+  // Expand accordion with recalculated height
+  answer.classList.add('expanding');
+  answer.style.maxHeight = 'none'; // remove limits
+  void answer.offsetHeight;
+  const fullHeight = answer.scrollHeight + 'px';
+  answer.style.maxHeight = '0';
+  requestAnimationFrame(() => {
+    answer.style.maxHeight = fullHeight;
+  });
 }
- // closes the if block
-
-} // ✅ closes the showComparisonTable function
+ // ✅ closes the showComparisonTable function
 
     document.addEventListener('click', function (e) {
   if (e.target.classList.contains('plan-header')) {
