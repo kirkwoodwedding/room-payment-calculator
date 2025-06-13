@@ -244,16 +244,21 @@
     }
 
     .accordion-answer {
-      padding: 16px 20px;
+      padding: 0;
       background-color: rgba(162, 178, 159, 0.3);
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.4s ease;
-      will-change: max-height;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      will-change: max-height, padding;
       border-radius: 5px;
       font-size: 0.95rem;
       color: var(--text-dark);
     }
+    
+    .accordion-item.active .accordion-answer {
+      padding: 16px 20px; /* full padding when expanded */
+    }
+
 
     .savings-wrapper {
       padding: 20px;
