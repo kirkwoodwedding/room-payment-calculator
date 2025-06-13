@@ -179,6 +179,23 @@
       color: white;
     }
 
+    .compare-btn {
+  background-color: #455841; /* deep green for contrast */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.compare-btn:hover {
+  background-color: #5d7263; /* softer hover effect */
+}
+
     /* Q&A Accordion styles */
     .accordion-question {
       background-color: #CFDBCD;
@@ -373,7 +390,7 @@
             <option value="biweekly">Every 2 Weeks</option>
             <option value="weekly">Weekly</option>
           </select>
-          <button onclick="showComparisonTable()">Compare All Savings Plans</button>
+          <button class="compare-btn" onclick="showComparisonTable()">Compare All Savings Plans</button>
           <div id="budgetResult"></div>
           <div class="comparison-container" id="comparisonContainer" style="display:none;">
             <h3>Plan Comparison</h3>
