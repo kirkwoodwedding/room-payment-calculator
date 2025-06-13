@@ -733,15 +733,7 @@ document.getElementById('calculateBtn').addEventListener('click', function () {
       comparisonBody.innerHTML = tableRows.join("");
       mobileCards.innerHTML = cardBlocks.join("");
       comparisonContainer.style.display = 'block';
-  
-      // Expand accordion with recalculated height
-      answer.classList.add('expanding');
-      answer.style.maxHeight = 'none'; // remove limits
-      void answer.offsetHeight;
-      const fullHeight = answer.scrollHeight + 'px';
-      answer.style.maxHeight = '0';
-      requestAnimationFrame(() => {
-        answer.style.maxHeight = fullHeight;
+      
       });
     }
   
