@@ -194,8 +194,6 @@
 /* Inner expanding area – flush into the card */
 .accordion-item.savings .accordion-answer {
   max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
   padding: 0;
 }
 
@@ -318,7 +316,6 @@
     display: none;
     padding: 0 20px 15px;
     font-size: 0.95rem;
-    /* REMOVE this: animation: slideDown 0.3s ease forwards; */
   }
   
   .plan-card.active .plan-content {
@@ -779,27 +776,11 @@ document.getElementById('calculateBtn').addEventListener('click', function () {
     document.querySelectorAll('.savings-toggle').forEach(button => {
       button.addEventListener('click', () => {
         const item = button.closest('.accordion-item');
-        const answer = item.querySelector('.accordion-answer');
-        const isOpen = item.classList.contains('active');
-  
-        if (isOpen) {
-          answer.style.maxHeight = answer.scrollHeight + 'px';
-          requestAnimationFrame(() => {
-            answer.style.maxHeight = '0';
-          });
-          item.classList.remove('active');
-        } else {
-          answer.style.maxHeight = 'none';
-          const fullHeight = answer.scrollHeight + 'px';
-          answer.style.maxHeight = '0';
-          requestAnimationFrame(() => {
-            answer.style.maxHeight = fullHeight;
-          });
-          item.classList.add('active');
-        }
+        item.classList.toggle('active');
       });
     });
-  
+    
+      
     // Accordion toggle behavior for FAQ section
     document.querySelectorAll('.accordion-question').forEach(button => {
       button.addEventListener('click', () => {
