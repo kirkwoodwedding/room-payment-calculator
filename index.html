@@ -713,6 +713,26 @@ document.getElementById('calculateBtn').addEventListener('click', function () {
 
 } // ✅ closes the showComparisonTable function
 
+    document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('plan-header')) {
+    const card = e.target.parentElement;
+    card.classList.toggle('active');
+
+    // Recalculate and animate parent accordion if open
+    const accordionItem = e.target.closest('.accordion-item');
+    const answer = accordionItem.querySelector('.accordion-answer');
+
+    if (accordionItem.classList.contains('active')) {
+      answer.style.maxHeight = 'none'; // Remove restriction temporarily
+      const newHeight = answer.scrollHeight + 'px';
+      answer.style.maxHeight = '0'; // Reset to 0
+      void answer.offsetHeight; // Force reflow
+      answer.style.transition = 'max-height 0.3s ease';
+      answer.style.maxHeight = newHeight;
+    }
+  }
+});
+
 // Savings Planner toggle interaction
 document.querySelectorAll('.savings-toggle').forEach(button => {
   button.addEventListener('click', () => {
