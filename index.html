@@ -220,16 +220,17 @@
     }
 
     .accordion-answer {
-      padding: 0; /* <-- changed from 0 20px */
+      padding: 0;
       background-color: rgba(162, 178, 159, 0.3);
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease;
+      transition: max-height 0.4s ease;
+      will-change: max-height;
       border-radius: 5px;
       font-size: 0.95rem;
       color: var(--text-dark);
     }
-    
+
     .savings-wrapper {
       padding: 20px;
       background-color: #CFDBCD; /* consistent with the others */
@@ -281,7 +282,7 @@
     color: #4a5d50;
   }
   
- .plan-content {
+   .plan-content {
     display: none;
     padding: 0 20px 15px;
     font-size: 0.95rem;
@@ -291,6 +292,7 @@
   .plan-card.active .plan-content {
     display: block;
   }
+
   
   .plan-card.active .plan-header span {
     transform: rotate(180deg);
