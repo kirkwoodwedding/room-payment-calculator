@@ -728,7 +728,6 @@ function showComparisonTable() {
           <p><strong>Amount Due:</strong> $${(isSplit ? plan.amount / 2 : plan.amount).toFixed(2)}</p>
           <p><strong>Duration:</strong> ${duration}</p>
           <p><strong>Save Per Interval:</strong> $${perInterval.toFixed(2)}</p>
-          <button onclick="downloadRecurringReminder('${plan.label} Payment Reminder', 'Save $${perInterval.toFixed(2)} ${intervalLabel}', '${plan.from.toISOString()}', '${interval}')">Add Recurring Reminder</button>
         </div>
       </div>
     `);
